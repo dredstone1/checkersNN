@@ -2,6 +2,7 @@
 #include "tensor.hpp"
 #include <model.hpp>
 #include <stdio.h>
+#include "../include/checkers_NN.hpp"
 
 int main() {
 	nn::global::Tensor::toGpu();
