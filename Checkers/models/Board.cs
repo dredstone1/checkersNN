@@ -1,3 +1,5 @@
+using SFML.System;
+
 namespace Checkers.models;
 
 public enum Cell
@@ -14,6 +16,12 @@ public enum CellP
     EMPTY_C,
     WHITE_C,
     BLACK_C,
+}
+
+public enum PlayerMode
+{
+    QUEEN,
+    NORMAL,
 }
 
 public class Board
@@ -62,13 +70,38 @@ public class Board
         return CellP.WHITE_C;
     }
 
-    public PlayerType CellTypeToPlayerType(CellP c) {
+    public PlayerType CellTypeToPlayerType(CellP c)
+    {
         if (c == CellP.BLACK_C)
             return PlayerType.BLACK;
         return PlayerType.WHITE;
     }
 
-    public void Move(int s1, int s2) {
-        
+    void handleDestroy(int s1, int s2) { }
+
+    public void Move(int s1, int s2)
+    {
+        handleDestroy(s1, s2);
+        _board[s2] = _board[s1];
+        _board[s1] = Cell.EMPTY_C;
+    }
+
+    public PlayerMode PModeFromCellIndex(int i)
+    {
+        if (_board[i] == Cell.BLACKQ_C || _board[i] == Cell.WHITEQ_C)
+            return PlayerMode.QUEEN;
+        return PlayerMode.NORMAL;
+    }
+
+    public int PosToIndex(int x, int y)
+    {
+        return y * 8 + x;
+    }
+
+    public Vector2f IndexToPos(int i)
+    {
+        int x = i % 8;
+        int y = i / 8;
+        return new Vector2f(x, y);
     }
 }

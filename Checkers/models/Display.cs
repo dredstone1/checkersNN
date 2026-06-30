@@ -7,7 +7,7 @@ namespace Checkers.models;
 public class Display
 {
     const int GRID_RES = 600;
-    const int GRID_SIZE = 8;
+    public const int GRID_SIZE = 8;
     const int SQUARE_RES = GRID_RES / GRID_SIZE;
 
     private bool running = false;
