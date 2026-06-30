@@ -2,36 +2,35 @@ namespace Checkers.models;
 
 public class Game
 {
-    PlayerType CP = PlayerType.WHITE; // Current Player
+    private readonly PlayerType _currentPlayer = PlayerType.WHITE;
+    private bool _running = false;
 
-    bool running = false;
-
-    Board board;
-
-    Display display;
+    private readonly Board _board;
+    private readonly Display _display;
 
     public Game()
     {
-        display = new Display(board);
+        _board = new();
+        _display = new Display(_board);
     }
 
     public void GameLoop()
     {
-        running = true;
+        _running = true;
 
-        while (running && display.IsRunning)
+        while (_running && _display.IsRunning)
         {
-            display.Update();
+            _display.Update();
         }
     }
 
     public void Start()
     {
         Console.WriteLine("Checkers starting");
-        display.StartDisplay();
+        _display.StartDisplay();
 
         GameLoop();
 
-        display.CloseDisplay();
+        _display.CloseDisplay();
     }
 }

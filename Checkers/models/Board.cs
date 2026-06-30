@@ -1,6 +1,6 @@
 namespace Checkers.models;
 
-public enum cell
+public enum Cell
 {
     EMPTY_C,
     BLACK_C,
@@ -9,44 +9,32 @@ public enum cell
 
 public class Board
 {
-    cell[] board = new cell[64];
+    private readonly Cell[] _board = new Cell[64];
 
-    public Board() { }
-
-    public cell getCell(int i)
+    public void ResetBoard()
     {
-        return board[i];
+        ClearBoard();
+
+        ResetBoard(0);
+        ResetBoard(5);
     }
 
-    public void setCell(int i, cell c)
-    {
-        board[i] = c;
-    }
-
-    public void resetBoard()
-    {
-        clearBoard();
-
-        resetBoard(0);
-        resetBoard(5);
-    }
-
-    public void resetBoard(int offset)
+    public void ResetBoard(int offset)
     {
         for (int i = offset; i < 3 * 8; ++i)
         {
             if ((i + i / 8) % 2 == 0)
             {
-                setCell(i, cell.BLACK_C);
+                _board[i] = Cell.BLACK_C;
             }
         }
     }
 
-    void clearBoard()
+    public void ClearBoard()
     {
         for (int i = 0; i < 64; ++i)
         {
-            board[i] = cell.EMPTY_C;
+            _board[i] = Cell.EMPTY_C;
         }
     }
 }

@@ -16,17 +16,17 @@ public class Display
         get { return running; }
     }
 
-    RenderWindow window;
-    
-    Board board;
+    private readonly RenderWindow _window;
 
-    public Display(Board _board)
+    private readonly Board _board;
+
+    public Display(Board board)
     {
-        board = _board;
-        window = new RenderWindow(new VideoMode((800, 1000)), "Checkers");
-        window.SetFramerateLimit(60);
+        _board = board;
+        _window = new RenderWindow(new VideoMode((800, 1000)), "Checkers");
+        _window.SetFramerateLimit(60);
 
-        events();
+        Events();
     }
 
     public void StartDisplay()
@@ -36,52 +36,52 @@ public class Display
 
     public void CloseDisplay()
     {
-        window.Close();
+        _window.Close();
         running = false;
     }
 
-    void Draw()
+    public void Draw()
     {
         DrawBoard();
     }
 
-    Color getSquareColor(int i)
-    {
-        return ((i + i / GRID_SIZE) % 2 == 0) ? new Color(205, 133, 63) : new Color(139, 69, 19);
-    }
+    public static Color GetSquareColor(int i) =>
+        ((i + i / GRID_SIZE) % 2 == 0) ? new Color(205, 133, 63) : new Color(139, 69, 19);
 
-    void DrawBoard()
+    public void DrawBoard()
     {
         for (int i = 0; i < GRID_SIZE * GRID_SIZE; ++i)
         {
             int x = (i % GRID_SIZE) * SQUARE_RES;
             int y = (i / GRID_SIZE) * SQUARE_RES;
 
-            DrawSquare((x, y), getSquareColor(i));
+            DrawSquare((x, y), GetSquareColor(i));
         }
     }
 
-    void DrawSquare(Vector2f pos, Color c)
+    public void DrawSquare(Vector2f pos, Color c)
     {
-        RectangleShape rect = new RectangleShape(new Vector2f(SQUARE_RES, SQUARE_RES));
-        rect.Position = pos + (20, 20);
-        rect.FillColor = c;
-        window.Draw(rect);
+        RectangleShape rect = new(new Vector2f(SQUARE_RES, SQUARE_RES))
+        {
+            Position = pos + (20, 20),
+            FillColor = c,
+        };
+        _window.Draw(rect);
     }
 
     public void Update()
     {
-        window.DispatchEvents();
-        window.Clear(Color.Yellow);
+        _window.DispatchEvents();
+        _window.Clear(Color.Yellow);
 
         Draw();
 
-        window.Display();
+        _window.Display();
     }
 
-    void events()
+    public void Events()
     {
-        window.Closed += (_, __) =>
+        _window.Closed += (_, __) =>
         {
             CloseDisplay();
         };
