@@ -21,6 +21,11 @@ public class Game
         _currentPlayer = (_currentPlayer == PlayerType.BLACK) ? PlayerType.WHITE : PlayerType.BLACK;
     }
 
+    bool checkMovmentDirection(int s1, int s2)
+    {
+        return (_board.getCellPlayer(s1) == CellP.BLACK_C) ? (s1 > s2) : (s1 < s2);
+    }
+
     bool checkMovmentType(int s1, int s2)
     {
         int x1 = s1 % 8;
@@ -35,17 +40,22 @@ public class Game
         if (dx != dy)
             return true;
 
-        if (dx == 2)
+        if (_board.PModeFromCellIndex(s1) == PlayerMode.NORMAL)
         {
-            int x3 = (x1 + x2) / 2;
-            int y3 = (y1 + y2) / 2;
-
-            if (_board.cells[_board.PosToIndex(x3, y3)] == Cell.EMPTY_C)
+            if (checkMovmentDirection(s1, s2))
                 return true;
-            
+
+            if (dx == 2)
+            {
+                int x3 = (x1 + x2) / 2;
+                int y3 = (y1 + y2) / 2;
+
+                if (_board.cells[_board.PosToIndex(x3, y3)] == Cell.EMPTY_C)
+                    return true;
+            }
+            else if (_board.PModeFromCellIndex(s1) == PlayerMode.NORMAL && dx != 1)
+                return true;
         }
-        else if (_board.PModeFromCellIndex(s1) == PlayerMode.NORMAL && dx != 1)
-            return true;
 
         return false;
     }
@@ -82,7 +92,7 @@ public class Game
     {
         _running = true;
 
-while (_running && _display.IsRunning)
+        while (_running && _display.IsRunning)
         {
             update();
         }

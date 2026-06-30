@@ -104,7 +104,13 @@ public class Board
     {
         handleDestroy(s1, s2);
 
-        _board[s2] = _board[s1];
+        if (_board[s1] == Cell.BLACKN_C && s2 > 54)
+            _board[s2] = Cell.BLACKQ_C;
+        else if (_board[s1] == Cell.WHITEN_C && s2 < 8)
+            _board[s2] = Cell.WHITEQ_C;
+        else
+            _board[s2] = _board[s1];
+
         _board[s1] = Cell.EMPTY_C;
     }
 
