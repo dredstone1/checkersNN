@@ -42,6 +42,7 @@ public class Game
 
             if (_board.cells[_board.PosToIndex(x3, y3)] == Cell.EMPTY_C)
                 return true;
+            
         }
         else if (_board.PModeFromCellIndex(s1) == PlayerMode.NORMAL && dx != 1)
             return true;
@@ -81,7 +82,7 @@ public class Game
     {
         _running = true;
 
-        while (_running && _display.IsRunning)
+while (_running && _display.IsRunning)
         {
             update();
         }

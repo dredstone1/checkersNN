@@ -46,27 +46,27 @@ public class Board
     {
         for (int i = offset; i < offset + layers * 8; ++i)
         {
-            if ((i + i / 8) % 2 == 0)
-            {
-                _board[i] = c;
-            }
+            if ((i + i / 8) % 2 != 0)
+                continue;
+
+            _board[i] = c;
         }
     }
 
     public void ClearBoard()
     {
         for (int i = 0; i < 64; ++i)
-        {
             _board[i] = Cell.EMPTY_C;
-        }
     }
 
     public CellP getCellPlayer(int i)
     {
         if (_board[i] == Cell.EMPTY_C)
             return CellP.EMPTY_C;
+
         if (_board[i] == Cell.BLACKQ_C || _board[i] == Cell.BLACKN_C)
             return CellP.BLACK_C;
+
         return CellP.WHITE_C;
     }
 
@@ -74,14 +74,36 @@ public class Board
     {
         if (c == CellP.BLACK_C)
             return PlayerType.BLACK;
+
         return PlayerType.WHITE;
     }
 
-    void handleDestroy(int s1, int s2) { }
+    void handleDestroy(int s1, int s2)
+    {
+        int x1 = s1 % 8;
+        int y1 = s1 / 8;
+
+        int x2 = s2 % 8;
+        int y2 = s2 / 8;
+
+        int dx = Math.Abs(x1 - x2);
+        int dy = Math.Abs(y1 - y2);
+
+        if (dx != dy || dx != 2)
+            return;
+
+        int x3 = (x1 + x2) / 2;
+        int y3 = (y1 + y2) / 2;
+
+        int i = PosToIndex(x3, y3);
+        if (_board[i] != Cell.EMPTY_C)
+            _board[i] = Cell.EMPTY_C;
+    }
 
     public void Move(int s1, int s2)
     {
         handleDestroy(s1, s2);
+
         _board[s2] = _board[s1];
         _board[s1] = Cell.EMPTY_C;
     }
@@ -90,6 +112,7 @@ public class Board
     {
         if (_board[i] == Cell.BLACKQ_C || _board[i] == Cell.WHITEQ_C)
             return PlayerMode.QUEEN;
+
         return PlayerMode.NORMAL;
     }
 
@@ -102,6 +125,7 @@ public class Board
     {
         int x = i % 8;
         int y = i / 8;
+
         return new Vector2f(x, y);
     }
 }

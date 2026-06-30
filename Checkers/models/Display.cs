@@ -52,9 +52,7 @@ public class Display
     Color getPLayerColor(Cell c)
     {
         if (c == Cell.BLACKN_C || c == Cell.BLACKQ_C)
-        {
             return Color.Black;
-        }
 
         return Color.White;
     }
@@ -72,9 +70,7 @@ public class Display
             Vector2f pos = (x, y);
 
             if (i == cellselected1)
-            {
                 pos += (10, 10);
-            }
 
             DrawPlayer(
                 pos,
@@ -92,6 +88,7 @@ public class Display
             Position = (pos + (20f, 20f)) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
             FillColor = c,
         };
+
         if (queen)
         {
             CircleShape rect1 = new CircleShape
@@ -100,6 +97,7 @@ public class Display
                 Position = (pos + (30f, 30f)) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
                 FillColor = c,
             };
+
             _window.Draw(rect1);
         }
         _window.Draw(rect);
