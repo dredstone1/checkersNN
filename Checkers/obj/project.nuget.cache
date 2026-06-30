@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "r2e5haBz5Hg=",
+  "dgSpecHash": "a7cKPy0GweY=",
   "success": true,
   "projectFilePath": "/home/maayan/repositories/checkersNN/Checkers/Checkers.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/maayan/.nuget/packages/csfml/3.0.0/csfml.3.0.0.nupkg.sha512",
+    "/home/maayan/.nuget/packages/sfml.audio/3.0.0/sfml.audio.3.0.0.nupkg.sha512",
+    "/home/maayan/.nuget/packages/sfml.graphics/3.0.0/sfml.graphics.3.0.0.nupkg.sha512",
+    "/home/maayan/.nuget/packages/sfml.net/3.0.0/sfml.net.3.0.0.nupkg.sha512",
+    "/home/maayan/.nuget/packages/sfml.system/3.0.0/sfml.system.3.0.0.nupkg.sha512",
+    "/home/maayan/.nuget/packages/sfml.window/3.0.0/sfml.window.3.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
