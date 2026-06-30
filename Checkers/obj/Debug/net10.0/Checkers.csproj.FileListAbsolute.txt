@@ -1,0 +1,15 @@
+/home/maayan/repositories/checkersNN/Checkers/bin/Debug/net10.0/Checkers
+/home/maayan/repositories/checkersNN/Checkers/bin/Debug/net10.0/Checkers.deps.json
+/home/maayan/repositories/checkersNN/Checkers/bin/Debug/net10.0/Checkers.runtimeconfig.json
+/home/maayan/repositories/checkersNN/Checkers/bin/Debug/net10.0/Checkers.dll
+/home/maayan/repositories/checkersNN/Checkers/bin/Debug/net10.0/Checkers.pdb
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/Checkers.GeneratedMSBuildEditorConfig.editorconfig
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/Checkers.AssemblyInfoInputs.cache
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/Checkers.AssemblyInfo.cs
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/Checkers.csproj.CoreCompileInputs.cache
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/Checkers.sourcelink.json
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/Checkers.dll
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/refint/Checkers.dll
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/Checkers.pdb
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/Checkers.genruntimeconfig.cache
+/home/maayan/repositories/checkersNN/Checkers/obj/Debug/net10.0/ref/Checkers.dll
