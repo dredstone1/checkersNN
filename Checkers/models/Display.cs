@@ -7,9 +7,8 @@ namespace Checkers.models;
 public class Display
 {
     const int GRID_RES = 600;
-
     const int GRID_SIZE = 8;
-    const int SQUARE_RES = GRID_RES/GRID_SIZE;
+    const int SQUARE_RES = GRID_RES / GRID_SIZE;
 
     private bool running = false;
     public bool IsRunning
@@ -18,9 +17,12 @@ public class Display
     }
 
     RenderWindow window;
+    
+    Board board;
 
-    public Display()
+    public Display(Board _board)
     {
+        board = _board;
         window = new RenderWindow(new VideoMode((800, 1000)), "Checkers");
         window.SetFramerateLimit(60);
 
@@ -45,21 +47,17 @@ public class Display
 
     Color getSquareColor(int i)
     {
-        if ((i + (i / GRID_SIZE)) % 2 == 0)
-        {
-            return Color.White;
-        }
-        else
-        {
-            return Color.Black;
-        }
+        return ((i + i / GRID_SIZE) % 2 == 0) ? new Color(205, 133, 63) : new Color(139, 69, 19);
     }
 
     void DrawBoard()
     {
-        for (int i = 0; i < GRID_SIZE*GRID_SIZE; ++i)
+        for (int i = 0; i < GRID_SIZE * GRID_SIZE; ++i)
         {
-            DrawSquare(((i % GRID_SIZE) * SQUARE_RES, (i / GRID_SIZE) * SQUARE_RES), getSquareColor(i));
+            int x = (i % GRID_SIZE) * SQUARE_RES;
+            int y = (i / GRID_SIZE) * SQUARE_RES;
+
+            DrawSquare((x, y), getSquareColor(i));
         }
     }
 

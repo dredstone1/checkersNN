@@ -2,22 +2,26 @@ namespace Checkers.models;
 
 public class Game
 {
-    Display display = new Display();
-
     PlayerType CP = PlayerType.WHITE; // Current Player
 
     bool running = false;
 
-    public Game( ) 
-    { 
+    Board board;
+
+    Display display;
+
+    public Game()
+    {
+        display = new Display(board);
     }
 
-    public void GameLoop() {
+    public void GameLoop()
+    {
         running = true;
 
-        while (running && display.IsRunning) 
+        while (running && display.IsRunning)
         {
-           display.Update(); 
+            display.Update();
         }
     }
 
