@@ -43,6 +43,42 @@ public class Display
     public void Draw()
     {
         DrawBoard();
+        DrawPlayers();
+    }
+
+    Color getPLayerColor(Cell c)
+    {
+        if (c == Cell.BLACK_C)
+        {
+            return Color.Black;
+        }
+
+        return Color.White;
+    }
+
+    void DrawPlayers()
+    {
+        for (int i = 0; i < GRID_SIZE * GRID_SIZE; ++i)
+        {
+            if (_board.cells[i] == Cell.EMPTY_C)
+                continue;
+
+            int x = (i % GRID_SIZE) * SQUARE_RES;
+            int y = (i / GRID_SIZE) * SQUARE_RES;
+
+            DrawPlayer((x, y), getPLayerColor(_board.cells[i]));
+        }
+    }
+
+    public void DrawPlayer(Vector2f pos, Color c)
+    {
+        CircleShape rect = new CircleShape
+        {
+            Radius = SQUARE_RES * 0.3f,
+            Position = (pos + (20f, 20f)) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
+            FillColor = c,
+        };
+        _window.Draw(rect);
     }
 
     public static Color GetSquareColor(int i) =>
