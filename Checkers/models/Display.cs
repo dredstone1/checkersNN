@@ -20,6 +20,9 @@ public class Display
 
     private readonly Board _board;
 
+    public int cellselected1 = -1;
+    public int cellselected2 = -1;
+
     public Display(Board board)
     {
         _board = board;
@@ -48,7 +51,7 @@ public class Display
 
     Color getPLayerColor(Cell c)
     {
-        if (c == Cell.BLACK_C)
+        if (c == Cell.BLACKN_C || c == Cell.BLACKQ_C)
         {
             return Color.Black;
         }
@@ -66,11 +69,22 @@ public class Display
             int x = (i % GRID_SIZE) * SQUARE_RES;
             int y = (i / GRID_SIZE) * SQUARE_RES;
 
-            DrawPlayer((x, y), getPLayerColor(_board.cells[i]));
+            Vector2f pos = (x, y);
+
+            if (i == cellselected1)
+            {
+                pos += (10, 10);
+            }
+
+            DrawPlayer(
+                pos,
+                getPLayerColor(_board.cells[i]),
+                (_board.cells[i] == Cell.BLACKQ_C || _board.cells[i] == Cell.WHITEQ_C)
+            );
         }
     }
 
-    public void DrawPlayer(Vector2f pos, Color c)
+    public void DrawPlayer(Vector2f pos, Color c, bool queen)
     {
         CircleShape rect = new CircleShape
         {
@@ -78,6 +92,16 @@ public class Display
             Position = (pos + (20f, 20f)) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
             FillColor = c,
         };
+        if (queen)
+        {
+            CircleShape rect1 = new CircleShape
+            {
+                Radius = SQUARE_RES * 0.3f,
+                Position = (pos + (30f, 30f)) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
+                FillColor = c,
+            };
+            _window.Draw(rect1);
+        }
         _window.Draw(rect);
     }
 
@@ -121,5 +145,37 @@ public class Display
         {
             CloseDisplay();
         };
+
+        _window.MouseButtonPressed += (sender, e) =>
+        {
+            if (e.Button == Mouse.Button.Left)
+            {
+                HandleMove((Vector2f)e.Position);
+            }
+        };
+    }
+
+    int getIndexFromPos(Vector2f pos)
+    {
+        int x = (int)pos.X / SQUARE_RES;
+        int y = (int)pos.Y / SQUARE_RES;
+
+        return (y * GRID_SIZE + x);
+    }
+
+    void HandleMove(Vector2f pos)
+    {
+        pos -= (20, 20);
+
+        if (cellselected1 != -1)
+            cellselected2 = getIndexFromPos(pos);
+        else
+            cellselected1 = getIndexFromPos(pos);
+    }
+
+    public void resetSelection()
+    {
+        cellselected1 = -1;
+        cellselected2 = -1;
     }
 }
