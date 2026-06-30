@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Checkers.models;
 
 namespace Checkers
 {
@@ -6,7 +6,8 @@ namespace Checkers
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Checkers start");
+            Game game = new Game();
+            game.Start();
         }
     }
 }
