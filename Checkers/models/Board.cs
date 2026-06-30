@@ -80,6 +80,14 @@ public class Board
 
     void handleDestroy(int s1, int s2)
     {
+        if (PModeFromCellIndex(s1) == PlayerMode.NORMAL)
+            handleDestroyN(s1, s2);
+        else
+            handleDestroyQ(s1, s2);
+    }
+
+    void handleDestroyN(int s1, int s2)
+    {
         int x1 = s1 % 8;
         int y1 = s1 / 8;
 
@@ -99,6 +107,8 @@ public class Board
         if (_board[i] != Cell.EMPTY_C)
             _board[i] = Cell.EMPTY_C;
     }
+
+    void handleDestroyQ(int s1, int s2) { }
 
     public void Move(int s1, int s2)
     {

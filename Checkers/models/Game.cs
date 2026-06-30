@@ -56,6 +56,7 @@ public class Game
             else if (_board.PModeFromCellIndex(s1) == PlayerMode.NORMAL && dx != 1)
                 return true;
         }
+        else { }
 
         return false;
     }
