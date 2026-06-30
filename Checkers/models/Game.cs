@@ -1,6 +1,5 @@
 namespace Checkers.models;
 
-
 public class Game
 {
     Display display = new Display();
@@ -16,7 +15,7 @@ public class Game
     public void GameLoop() {
         running = true;
 
-        while (running || display.IsRunning) 
+        while (running && display.IsRunning) 
         {
            display.Update(); 
         }

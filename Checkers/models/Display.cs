@@ -18,6 +18,8 @@ public class Display
     {
         window = new RenderWindow(new VideoMode((800, 1000)), "Checkers");
         window.SetFramerateLimit(60);
+
+        events();
     }
 
     public void StartDisplay()
@@ -27,17 +29,32 @@ public class Display
 
     public void CloseDisplay()
     {
+        window.Close();
         running = false;
     }
+
+    void Draw()
+    {
+        DrawBoard();
+    }
+
+    void DrawBoard() { }
 
     public void Update()
     {
         window.DispatchEvents();
         window.Clear(Color.White);
 
-
-
+        Draw();
 
         window.Display();
+    }
+
+    void events()
+    {
+        window.Closed += (_, __) =>
+        {
+            CloseDisplay();
+        };
     }
 }
