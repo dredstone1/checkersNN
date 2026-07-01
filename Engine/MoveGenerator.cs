@@ -6,43 +6,40 @@ namespace Engine;
 
 public class MoveGenerator
 {
-    private static readonly IPieceDefinition[] _pieceDefinitions =
-    [
-        new ManDefinition(),
-        new KingDefinition(),
-    ];
+    private static readonly IPieceDefinition _manDefinition = new ManDefinition();
+    private static readonly IPieceDefinition _kingDefinition = new KingDefinition();
 
     public static void Generate(BitBoard board, Span<Move> moves, ref int moveCount)
     {
         PieceColor color = board.IsWhiteToMove ? PieceColor.White : PieceColor.Black;
 
-        for (int pieceTypeIdx = 0; pieceTypeIdx < board.Bitboards.GetLength(1); pieceTypeIdx++)
-        {
-            PieceType pieceType = (PieceType)pieceTypeIdx;
-            IPieceDefinition definition = _pieceDefinitions[pieceTypeIdx];
+        GenerateForPieces(
+            board,
+            piece: new Piece() { Type = PieceType.Man, Color = color },
+            _manDefinition,
+            moves,
+            ref moveCount
+        );
 
-            UInt128 colorBitboard = board.BitboardFor(pieceType, color);
-            GenerateForPieces(
-                board,
-                colorBitboard,
-                definition,
-                piece: new Piece() { Type = pieceType, Color = color },
-                moves,
-                ref moveCount
-            );
-        }
+        GenerateForPieces(
+            board,
+            piece: new Piece() { Type = PieceType.King, Color = color },
+            _kingDefinition,
+            moves,
+            ref moveCount
+        );
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void GenerateForPieces(
         BitBoard board,
-        UInt128 bitboard,
-        IPieceDefinition definition,
         Piece piece,
+        IPieceDefinition definition,
         Span<Move> moves,
         ref int moveCount
     )
     {
+        BoardBits bitboard = board.BitboardFor(piece.Type, piece.Color);
         while (bitboard != 0)
         {
             int squareIndex = BitboardHelpers.BitScanForward(ref bitboard);
