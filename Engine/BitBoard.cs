@@ -42,6 +42,36 @@ public class BitBoard
         ZobristKey = Zobrist.Compute(this);
     }
 
+    public BitBoard(BitBoard other)
+    {
+        int colors = other.Bitboards.GetLength(0);
+        int types = other.Bitboards.GetLength(1);
+        Bitboards = new BoardBits[colors, types];
+        for (int color = 0; color < colors; color++)
+        {
+            for (int pieceType = 0; pieceType < types; pieceType++)
+            {
+                Bitboards[color, pieceType] = other.Bitboards[color, pieceType];
+            }
+        }
+
+        PieceAt = new Piece?[other.PieceAt.Length];
+        for (int i = 0; i < other.PieceAt.Length; i++)
+        {
+            Piece? otherPiece = other.PieceAt[i];
+            PieceAt[i] = otherPiece is null
+                ? null
+                : new Piece() { Type = otherPiece.Value.Type, Color = otherPiece.Value.Color };
+        }
+
+        WhitePieces = other.WhitePieces;
+        BlackPieces = other.BlackPieces;
+        Occupancy = other.Occupancy;
+        Empty = other.Empty;
+        IsWhiteToMove = other.IsWhiteToMove;
+        ZobristKey = other.ZobristKey;
+    }
+
     public ref BoardBits BitboardFor(PieceType pieceType, PieceColor color) =>
         ref Bitboards[(int)color, (int)pieceType];
 
