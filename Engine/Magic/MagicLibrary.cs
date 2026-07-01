@@ -6,6 +6,7 @@ namespace Engine.Magic;
 public static class MagicLibrary
 {
     public static MagicPieceTable KingTable { get; }
+    public static MagicPieceTable KingCaptureTable { get; }
 
     private static readonly string _magicBasePath = Path.Combine(
         AppContext.BaseDirectory,
@@ -14,7 +15,13 @@ public static class MagicLibrary
 
     static MagicLibrary()
     {
-        KingTable = LoadTable("KingMagic.msgpack");
+#if BOARD_10
+        KingTable = LoadTable("KingMagic128.msgpack");
+        KingCaptureTable = LoadTable("KingCaptureMagic128.msgpack");
+#elif BOARD_8
+        KingTable = LoadTable("KingMagic64.msgpack");
+        KingCaptureTable = LoadTable("KingCaptureMagic64.msgpack");
+#endif
     }
 
     private static MagicPieceTable LoadTable(string fileName)
@@ -24,10 +31,10 @@ public static class MagicLibrary
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static UInt128 GetAttacks(MagicPieceTable table, int square, UInt128 occupancy)
+    public static BoardBits GetAttacks(MagicPieceTable table, int square, BoardBits occupancy)
     {
-        UInt128 blockers = occupancy & table.Masks[square];
-        UInt128 index = (blockers * table.MagicNumbers[square]) >> table.Shifts[square];
+        BoardBits blockers = occupancy & table.Masks[square];
+        BoardBits index = (blockers * table.MagicNumbers[square]) >> table.Shifts[square];
         return table.AttackTable[square][(int)index];
     }
 }

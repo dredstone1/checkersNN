@@ -8,8 +8,6 @@ public static class Constants
     public const int BoardSize = 10;
 #elif BOARD_8
     public const int BoardSize = 8;
-#else
-#error Unsupported board size
 #endif
 
     public const int AlphaStart = -10_000_000;

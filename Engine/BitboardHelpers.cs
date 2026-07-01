@@ -47,8 +47,6 @@ public static class BitboardHelpers
     }
 
     public static BoardBits One => 1ul;
-#else
-#error Unsupported board size
 #endif
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
