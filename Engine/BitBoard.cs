@@ -17,13 +17,14 @@ public class BitBoard
 
     public bool IsWhiteToMove { get; private set; } = true;
 
-    public BitBoard(Dictionary<int, Piece> pieces)
+    public BitBoard(Dictionary<int, Piece> pieces, bool isWhiteToMove)
     {
+        IsWhiteToMove = isWhiteToMove;
         Bitboards = new BoardBits[
             Enum.GetValues<PieceColor>().Length,
             Enum.GetValues<PieceType>().Length
         ];
-        PieceAt = new Piece?[Constants.BoardSize * Constants.BoardSize];
+        PieceAt = new Piece?[Constants.SquareCount];
 
         foreach (var (point, piece) in pieces)
         {

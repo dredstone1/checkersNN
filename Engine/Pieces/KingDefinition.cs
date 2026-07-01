@@ -18,9 +18,11 @@ public class KingDefinition : IPieceDefinition
             position,
             board.Occupancy
         );
-        while (attacks != 0)
+
+        BoardBits nonCaptures = attacks & board.Empty;
+        while (nonCaptures != 0)
         {
-            byte to = BitboardHelpers.BitScanForward(ref attacks);
+            byte to = BitboardHelpers.BitScanForward(ref nonCaptures);
             moves[moveCount++] = new()
             {
                 From = position,
@@ -29,25 +31,22 @@ public class KingDefinition : IPieceDefinition
             };
         }
 
-        BoardBits captures = MagicLibrary.GetAttacks(
-            MagicLibrary.KingCaptureTable,
-            position,
-            board.Occupancy
-        );
+        BoardBits captures = attacks & board.BitboardForEnemyOf(piece.Color);
+        captures &= BitboardConstants.NotEdgeMasks;
 
         int y = position / Constants.BoardSize;
         int x = position % Constants.BoardSize;
         while (captures != 0)
         {
-            byte to = BitboardHelpers.BitScanForward(ref attacks);
+            byte to = BitboardHelpers.BitScanForward(ref captures);
             int toY = to / Constants.BoardSize;
             int toX = to % Constants.BoardSize;
 
             int dx = Math.Sign(x - toX);
             int dy = Math.Sign(y - toY);
 
-            toX += dx;
-            toY += dy;
+            toX -= dx;
+            toY -= dy;
 
             moves[moveCount++] = new()
             {

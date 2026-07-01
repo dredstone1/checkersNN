@@ -25,6 +25,8 @@ public static class BitboardConstants
     public static readonly BoardBits NotBottomRightEdgeMask = ~BottomRightEdgeMask;
     public static readonly BoardBits NotBottomLeftEdgeMask = ~BottomLeftEdgeMask;
 
+    public static readonly BoardBits NotEdgeMasks = ~EdgeMasks;
+
     private static BoardBits MakeFileMask(int file)
     {
         BoardBits mask = 0;

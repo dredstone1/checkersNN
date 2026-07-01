@@ -14,12 +14,12 @@ public static class Zobrist
     {
         Random rng = new(6767);
 
-        PieceSquare = new ulong[PieceTypes, Colors, 100];
+        PieceSquare = new ulong[PieceTypes, Colors, Constants.SquareCount];
         for (int piece = 0; piece < PieceTypes; piece++)
         {
             for (int color = 0; color < Colors; color++)
             {
-                for (int square = 0; square < 100; square++)
+                for (int square = 0; square < Constants.SquareCount; square++)
                 {
                     PieceSquare[piece, color, square] = NextULong(rng);
                 }
@@ -40,7 +40,7 @@ public static class Zobrist
     {
         ulong hash = 0;
 
-        for (byte square = 0; square < 100; square++)
+        for (byte square = 0; square < Constants.SquareCount; square++)
         {
             if (board.TryGetPieceAt(square, out var piece))
             {

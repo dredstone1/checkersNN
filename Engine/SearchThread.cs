@@ -1,4 +1,5 @@
-﻿using Engine.Models;
+﻿using Engine.Evaluators;
+using Engine.Models;
 
 namespace Engine;
 
@@ -8,8 +9,8 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
 
     private readonly Move[,] _killerMoves = new Move[maxDepth + 1, 2];
     private readonly int[,] _historyHeuristic = new int[
-        Constants.BoardSize * Constants.BoardSize,
-        Constants.BoardSize * Constants.BoardSize
+        Constants.SquareCount,
+        Constants.SquareCount
     ];
     private readonly TranspositionTable _transpositionTable = transpositionTable;
 

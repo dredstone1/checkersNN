@@ -6,21 +6,15 @@ namespace Engine.Magic;
 public static class MagicLibrary
 {
     public static MagicPieceTable KingTable { get; }
-    public static MagicPieceTable KingCaptureTable { get; }
 
-    private static readonly string _magicBasePath = Path.Combine(
-        AppContext.BaseDirectory,
-        "MagicTables"
-    );
+    private static readonly string _magicBasePath = Path.Combine(AppContext.BaseDirectory, "Magic");
 
     static MagicLibrary()
     {
 #if BOARD_10
         KingTable = LoadTable("KingMagic128.msgpack");
-        KingCaptureTable = LoadTable("KingCaptureMagic128.msgpack");
 #elif BOARD_8
         KingTable = LoadTable("KingMagic64.msgpack");
-        KingCaptureTable = LoadTable("KingCaptureMagic64.msgpack");
 #endif
     }
 

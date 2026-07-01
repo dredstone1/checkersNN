@@ -9,6 +9,7 @@ public static class Constants
 #elif BOARD_8
     public const int BoardSize = 8;
 #endif
+    public const int SquareCount = BoardSize * BoardSize;
 
     public const int AlphaStart = -10_000_000;
     public const int BetaStart = 10_000_000;
