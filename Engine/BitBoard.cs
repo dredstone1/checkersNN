@@ -11,6 +11,7 @@ public class BitBoard
     public BoardBits WhitePieces { get; private set; }
     public BoardBits BlackPieces { get; private set; }
     public BoardBits Occupancy { get; private set; }
+    public BoardBits Empty { get; private set; }
 
     public ulong ZobristKey { get; private set; }
 
@@ -26,7 +27,7 @@ public class BitBoard
 
         foreach (var (point, piece) in pieces)
         {
-            Bitboards[(int)piece.Color, (int)piece.Type] |= BoardBits.One << point;
+            Bitboards[(int)piece.Color, (int)piece.Type] |= BitboardHelpers.One << point;
             PieceAt[point] = piece;
         }
 
@@ -35,12 +36,29 @@ public class BitBoard
             WhitePieces |= Bitboards[(int)PieceColor.White, i];
             BlackPieces |= Bitboards[(int)PieceColor.Black, i];
         }
+        ComputeAggregateBitboards();
 
         ZobristKey = Zobrist.Compute(this);
     }
 
     public ref BoardBits BitboardFor(PieceType pieceType, PieceColor color) =>
         ref Bitboards[(int)color, (int)pieceType];
+
+    public BoardBits BitboardForColor(PieceColor color) =>
+        color switch
+        {
+            PieceColor.White => WhitePieces,
+            PieceColor.Black => BlackPieces,
+            _ => throw new ArgumentOutOfRangeException(nameof(color)),
+        };
+
+    public BoardBits BitboardForEnemyOf(PieceColor color) =>
+        color switch
+        {
+            PieceColor.White => BlackPieces,
+            PieceColor.Black => WhitePieces,
+            _ => throw new ArgumentOutOfRangeException(nameof(color)),
+        };
 
     public bool TryGetPieceAt(byte position, [NotNullWhen(true)] out Piece? piece)
     {
@@ -157,8 +175,8 @@ public class BitBoard
 
         ref BoardBits bitboard = ref BitboardFor(pieceType, color);
 
-        BoardBits fromMask = BoardBits.One << from;
-        BoardBits toMask = BoardBits.One << to;
+        BoardBits fromMask = BitboardHelpers.One << from;
+        BoardBits toMask = BitboardHelpers.One << to;
         bitboard &= ~fromMask;
         bitboard |= toMask;
 
@@ -179,7 +197,7 @@ public class BitBoard
 
     private void RemovePiece(PieceType pieceType, PieceColor color, byte at)
     {
-        BoardBits atMask = BoardBits.One << at;
+        BoardBits atMask = BitboardHelpers.One << at;
         BoardBits inverseMask = ~atMask;
 
         ref BoardBits bitboard = ref BitboardFor(pieceType, color);
@@ -207,7 +225,7 @@ public class BitBoard
             RemovePiece(piece.Value.Type, piece.Value.Color, at);
         }
 
-        BoardBits mask = BoardBits.One << at;
+        BoardBits mask = BitboardHelpers.One << at;
         ref BoardBits bitboard = ref BitboardFor(type, color);
         bitboard |= mask;
 
@@ -227,6 +245,6 @@ public class BitBoard
     private void ComputeAggregateBitboards()
     {
         Occupancy = WhitePieces | BlackPieces;
-        //Empty = ~Occupancy;
+        Empty = ~Occupancy;
     }
 }
