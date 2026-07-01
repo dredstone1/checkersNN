@@ -165,6 +165,9 @@ public class Display
     {
         pos -= (20, 20);
 
+        if (pos.X < 0 || pos.Y < 0 || pos.X > GRID_RES || pos.Y > GRID_RES)
+            return;
+
         if (cellselected1 != -1)
             cellselected2 = getIndexFromPos(pos);
         else

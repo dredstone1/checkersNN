@@ -32,6 +32,7 @@ public class Board
     public Board()
     {
         ResetBoard();
+        _board[4] = Cell.WHITEQ_C;
     }
 
     public void ResetBoard()
@@ -83,7 +84,7 @@ public class Board
         if (PModeFromCellIndex(s1) == PlayerMode.NORMAL)
             handleDestroyN(s1, s2);
         else
-            handleDestroyQ(s1, s2);
+            handleDestroyN(s1, s2);
     }
 
     void handleDestroyN(int s1, int s2)
@@ -143,5 +144,32 @@ public class Board
         int y = i / 8;
 
         return new Vector2f(x, y);
+    }
+
+    public int GetDDiagonl(int s1, int s2)
+    {
+        int x1 = s1 % 8;
+        int y1 = s1 / 8;
+
+        int x2 = s2 % 8;
+        int y2 = s2 / 8;
+
+        int d = Math.Abs(x1 - x2);
+
+        int dx = 1,
+            dy = 1;
+        if (x2 - x1 < 0)
+            dx = -1;
+        if (y2 - y1 < 0)
+            dy = -1;
+
+        for (int i = 1; i < d; ++i)
+        {
+            if (_board[PosToIndex(x1 + i * dx, y1 + i * dy)] == Cell.EMPTY_C)
+                continue;
+            return i + 1;
+        }
+
+        return 0;
     }
 }

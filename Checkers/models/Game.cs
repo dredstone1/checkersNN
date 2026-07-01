@@ -56,7 +56,8 @@ public class Game
             else if (_board.PModeFromCellIndex(s1) == PlayerMode.NORMAL && dx != 1)
                 return true;
         }
-        else { }
+        else if (dx > 1 && _board.GetDDiagonl(s1, s2) != dx)
+            return true;
 
         return false;
     }
