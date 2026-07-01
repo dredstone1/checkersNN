@@ -8,5 +8,5 @@ public class Model
     public static extern IntPtr Model_Create();
 
     [DllImport("../../../../NeuralNetwork/build/libNeuralNetwork.so")]
-    public static extern float[] Model_Run(float[] input, Model model);
+    public static extern void Model_Run(IntPtr model, float[] input, float[] output);
 }

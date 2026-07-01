@@ -84,9 +84,28 @@ public class Game
     {
         _display.Update();
 
-        if (_currentPlayer == PlayerType.WHITE)
+        if (_currentPlayer == PlayerType.BLACK)
         {
-         //   Model.Model_Run(_board.getNNDate(), model);
+            float[] list = new float[128];
+            
+            Console.WriteLine($"rrr: {_board.getNNData()[0]}");
+            Model.Model_Run(model, _board.getNNData(), list);
+
+            int h1 = 0;
+            int h2 = 0;
+            for (int i = 0; i < 64; ++i)
+            {
+                if (list[h1] < list[i])
+                    h1 = i;
+            }
+            for (int i = 0; i < 64; ++i)
+            {
+                if (list[h2 + 64] < list[i + 64])
+                    h2 = i;
+            }
+            Console.WriteLine($"h1: {h1}, h2: {h2}");
+
+            toggleCurrentPlayer();
         }
         else if (_display.cellselected2 != -1)
         {
