@@ -1,9 +1,9 @@
-using SFML.System;
-
 namespace Checkers.models;
 
 public class Game
 {
+    IntPtr model;
+
     private PlayerType _currentPlayer = PlayerType.WHITE;
     private bool _running = false;
 
@@ -14,6 +14,7 @@ public class Game
     {
         _board = new();
         _display = new Display(_board);
+        model = Model.Model_Create();
     }
 
     void toggleCurrentPlayer()
@@ -83,7 +84,11 @@ public class Game
     {
         _display.Update();
 
-        if (_display.cellselected2 != -1)
+        if (_currentPlayer == PlayerType.WHITE)
+        {
+         //   Model.Model_Run(_board.getNNDate(), model);
+        }
+        else if (_display.cellselected2 != -1)
         {
             AttemptMove(_display.cellselected1, _display.cellselected2);
             _display.resetSelection();

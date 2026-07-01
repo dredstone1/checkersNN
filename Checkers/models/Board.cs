@@ -172,4 +172,32 @@ public class Board
 
         return 0;
     }
+
+    public float[] getNNDate()
+    {
+        float[] data = new float[192];
+
+        for (int i = 0; i < 64; ++i)
+        {
+            if (_board[i] == Cell.EMPTY_C)
+                data[i] = 0;
+        }
+
+        for (int i = 64; i < 64 * 2; ++i)
+        {
+            if (_board[i] == Cell.BLACKN_C)
+                data[i] = 1;
+            else if (_board[i] == Cell.BLACKQ_C)
+                data[i] = 0.5f;
+        }
+
+        for (int i = 64 * 2; i < 64 * 3; ++i)
+        {
+            if (_board[i] == Cell.WHITEN_C)
+                data[i] = 1;
+            else if (_board[i] == Cell.WHITEQ_C)
+                data[i] = 0.5f;
+        }
+        return data;
+    }
 }
