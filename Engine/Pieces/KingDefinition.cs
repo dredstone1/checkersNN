@@ -51,9 +51,9 @@ public class KingDefinition : IPieceDefinition
             moves[moveCount++] = new()
             {
                 From = position,
-                To = to,
+                To = (byte)(toY * Constants.BoardSize + toX),
                 Piece = piece,
-                CapturesMask = BitboardHelpers.One << (toY * Constants.BoardSize + toX),
+                CapturesMask = BitboardHelpers.One << to,
             };
         }
     }

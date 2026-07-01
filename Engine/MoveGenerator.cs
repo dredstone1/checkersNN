@@ -30,6 +30,30 @@ public class MoveGenerator
         );
     }
 
+    public static void GenerateForPiece(
+        BitBoard board,
+        byte position,
+        Piece piece,
+        Span<Move> moves,
+        ref int moveCount
+    )
+    {
+        UInt128 bitboard = board.BitboardFor(piece.Type, piece.Color);
+        IPieceDefinition definition =
+            piece.Type is PieceType.Man ? _manDefinition : _kingDefinition;
+
+        if ((bitboard & (UInt128.One << position)) != 0)
+        {
+            definition.GenerateMoves(
+                board,
+                piece,
+                position,
+                moves: moves,
+                moveCount: ref moveCount
+            );
+        }
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void GenerateForPieces(
         BitBoard board,

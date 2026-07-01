@@ -2,6 +2,8 @@
 
 public static class Evaluator
 {
+    public static int Evaluate(BitBoard board) => 0;
+
     public static bool TryEvaluateTermination(BitBoard board, int depth, out int terminationEval)
     {
         if (board.WhitePieces == 0)
