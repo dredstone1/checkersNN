@@ -109,7 +109,7 @@ public class BitBoard
             ZobristKey = ZobristKey,
         };
 
-        UInt128 captureMask = move.CapturesMask;
+        BoardBits captureMask = move.CapturesMask;
         while (captureMask != 0)
         {
             byte captureSquare = BitboardHelpers.BitScanForward(ref captureMask);
@@ -155,10 +155,10 @@ public class BitBoard
             RemovePiece(piece.Value.Type, piece.Value.Color, to);
         }
 
-        ref UInt128 bitboard = ref BitboardFor(pieceType, color);
+        ref BoardBits bitboard = ref BitboardFor(pieceType, color);
 
-        UInt128 fromMask = UInt128.One << from;
-        UInt128 toMask = UInt128.One << to;
+        BoardBits fromMask = BoardBits.One << from;
+        BoardBits toMask = BoardBits.One << to;
         bitboard &= ~fromMask;
         bitboard |= toMask;
 
@@ -179,10 +179,10 @@ public class BitBoard
 
     private void RemovePiece(PieceType pieceType, PieceColor color, byte at)
     {
-        UInt128 atMask = UInt128.One << at;
-        UInt128 inverseMask = ~atMask;
+        BoardBits atMask = BoardBits.One << at;
+        BoardBits inverseMask = ~atMask;
 
-        ref UInt128 bitboard = ref BitboardFor(pieceType, color);
+        ref BoardBits bitboard = ref BitboardFor(pieceType, color);
         bitboard &= inverseMask;
 
         switch (color)
@@ -207,8 +207,8 @@ public class BitBoard
             RemovePiece(piece.Value.Type, piece.Value.Color, at);
         }
 
-        UInt128 mask = UInt128.One << at;
-        ref UInt128 bitboard = ref BitboardFor(type, color);
+        BoardBits mask = BoardBits.One << at;
+        ref BoardBits bitboard = ref BitboardFor(type, color);
         bitboard |= mask;
 
         switch (color)
@@ -228,8 +228,5 @@ public class BitBoard
     {
         Occupancy = WhitePieces | BlackPieces;
         //Empty = ~Occupancy;
-
-        //WhiteEnemy = BlackPieces | NeutralPieces;
-        //BlackEnemy = WhitePieces | NeutralPieces;
     }
 }

@@ -215,7 +215,7 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
                 continue;
             }
 
-            UInt128 capturesMask = move.CapturesMask;
+            BoardBits capturesMask = move.CapturesMask;
             byte firstCaptureAt = BitboardHelpers.BitScanForward(ref capturesMask);
             Piece? capturedPiece = board.GetPieceAt(firstCaptureAt);
             if (capturedPiece is null)

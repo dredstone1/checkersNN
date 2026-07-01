@@ -75,7 +75,7 @@ public static class MoveOrdering
 
         if (move.CapturesMask != 0)
         {
-            UInt128 captureMask = move.CapturesMask;
+            BoardBits captureMask = move.CapturesMask;
             int score = 0;
             int attackerValue = MaterialValue.GetPieceValue(move.Piece.Type);
             while (captureMask != 0)
