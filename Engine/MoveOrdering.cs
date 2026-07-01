@@ -1,0 +1,163 @@
+﻿using Engine.Models;
+
+namespace Engine;
+
+public static class MoveOrdering
+{
+    public static void ScoreMoves(
+        BitBoard board,
+        int depth,
+        Move[,] killerMoves,
+        int[,] historyHeuristic,
+        int packedTtMove,
+        Span<int> scores,
+        Span<Move> moves,
+        int moveCount
+    )
+    {
+        for (int i = 0; i < moveCount; i++)
+        {
+            scores[i] = ScoreMove(
+                moves[i],
+                board,
+                depth,
+                killerMoves,
+                historyHeuristic,
+                packedTtMove
+            );
+        }
+    }
+
+    public static Move GetNextHighestMove(int i, Span<Move> moves, Span<int> scores, int moveCount)
+    {
+        int bestIndex = i;
+        int bestScore = scores[i];
+
+        for (int j = i + 1; j < moveCount; j++)
+        {
+            if (scores[j] > bestScore)
+            {
+                bestScore = scores[j];
+                bestIndex = j;
+            }
+        }
+
+        if (bestIndex != i)
+        {
+            (moves[i], moves[bestIndex]) = (moves[bestIndex], moves[i]);
+            (scores[i], scores[bestIndex]) = (scores[bestIndex], scores[i]);
+        }
+        return moves[i];
+    }
+
+    private static int ScoreMove(
+        Move move,
+        BitBoard board,
+        int depth,
+        Move[,] killerMoves,
+        int[,] historyHeuristic,
+        int packedTtMove
+    )
+    {
+        int packedMove = move.Pack();
+        if (packedMove == packedTtMove)
+        {
+            return 20_000;
+        }
+
+        if (
+            (move.From == killerMoves[depth, 0].From && move.To == killerMoves[depth, 0].To)
+            || (move.From == killerMoves[depth, 1].From && move.To == killerMoves[depth, 1].To)
+        )
+        {
+            return 15_000;
+        }
+
+        if (move.CapturesMask != 0)
+        {
+            UInt128 captureMask = move.CapturesMask;
+            int score = 0;
+            int attackerValue = MaterialValue.GetPieceValue(move.Piece.Type);
+            while (captureMask != 0)
+            {
+                byte captureSquare = BitboardHelpers.BitScanForward(ref captureMask);
+                if (board.TryGetPieceAt(captureSquare, out var capturePiece))
+                {
+                    int victimValue = MaterialValue.GetPieceValue(capturePiece.Value.Type);
+                    score += victimValue - attackerValue;
+                }
+            }
+            return 10_000 + score;
+        }
+
+        if (move.IsPromotion)
+        {
+            return 8_000;
+        }
+
+        return historyHeuristic[move.From, move.To];
+    }
+
+    public static void SortMoves(
+        BitBoard board,
+        int depth,
+        Move[,] killers,
+        int[,] history,
+        int packedTtMove,
+        Span<Move> moves,
+        int moveCount
+    )
+    {
+        Span<int> scores = stackalloc int[moveCount];
+        ScoreMoves(board, depth, killers, history, packedTtMove, scores, moves, moveCount);
+
+        QuickSort(moves, scores, 0, moveCount - 1);
+    }
+
+    private static void QuickSort(Span<Move> moves, Span<int> scores, int left, int right)
+    {
+        while (left < right)
+        {
+            int i = left;
+            int j = right;
+            int pivot = scores[(left + right) >> 1];
+
+            while (i <= j)
+            {
+                while (scores[i] > pivot)
+                {
+                    i++;
+                }
+                while (scores[j] < pivot)
+                {
+                    j--;
+                }
+
+                if (i <= j)
+                {
+                    (scores[i], scores[j]) = (scores[j], scores[i]);
+                    (moves[i], moves[j]) = (moves[j], moves[i]);
+                    i++;
+                    j--;
+                }
+            }
+
+            if (j - left < right - i)
+            {
+                if (left < j)
+                {
+                    QuickSort(moves, scores, left, j);
+                }
+                left = i;
+            }
+            else
+            {
+                if (i < right)
+                {
+                    QuickSort(moves, scores, i, right);
+                }
+                right = j;
+            }
+        }
+    }
+}
