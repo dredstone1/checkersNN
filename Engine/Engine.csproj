@@ -6,7 +6,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <BoardSize>10</BoardSize>
+    <BoardSize>8</BoardSize>
     <DefineConstants>$(DefineConstants);BOARD_$(BoardSize)</DefineConstants>
   </PropertyGroup>
 </Project>
