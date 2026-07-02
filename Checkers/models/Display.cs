@@ -90,19 +90,10 @@ public class Display
             Position = pos + (20, 20) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
             FillColor = c,
         };
+        _window.Draw(rect);
 
         if (queen)
-        {
-            CircleShape rect1 = new CircleShape
-            {
-                Radius = SQUARE_RES * 0.3f,
-                Position = pos + (30, 30) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
-                FillColor = c,
-            };
-
-            _window.Draw(rect1);
-        }
-        _window.Draw(rect);
+            DrawPlayer(pos + (10, 10), c, false);
     }
 
     public static Color GetSquareColor(int i) =>
@@ -110,7 +101,7 @@ public class Display
 
     public void DrawBoard()
     {
-        for (int i = 0; i < GRID_SIZE * GRID_SIZE; ++i)
+        for (int i = 0; i < 64; ++i)
         {
             DrawSquare((Vector2f)Board.IndexToPos(i) * SQUARE_RES, GetSquareColor(i));
         }
