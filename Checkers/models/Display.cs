@@ -69,7 +69,11 @@ public class Display
             if (i == cellselected1)
                 pos += (10, 10);
 
-            DrawPlayer((Vector2f)pos, getPLayerColor(_board.cells[i]), isQueen(_board.cells[i]));
+            DrawPlayer(
+                (Vector2f)pos * SQUARE_RES,
+                getPLayerColor(_board.cells[i]),
+                isQueen(_board.cells[i])
+            );
         }
     }
 
@@ -83,7 +87,7 @@ public class Display
         CircleShape rect = new CircleShape
         {
             Radius = SQUARE_RES * 0.3f,
-            Position = pos + (20f, 20f) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
+            Position = pos + (20, 20) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
             FillColor = c,
         };
 
@@ -92,7 +96,7 @@ public class Display
             CircleShape rect1 = new CircleShape
             {
                 Radius = SQUARE_RES * 0.3f,
-                Position = pos + (30f, 30f) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
+                Position = pos + (30, 30) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
                 FillColor = c,
             };
 
@@ -108,15 +112,15 @@ public class Display
     {
         for (int i = 0; i < GRID_SIZE * GRID_SIZE; ++i)
         {
-            DrawSquare(Board.IndexToPos(i), GetSquareColor(i));
+            DrawSquare((Vector2f)Board.IndexToPos(i) * SQUARE_RES, GetSquareColor(i));
         }
     }
 
-    public void DrawSquare(Vector2i pos, Color c)
+    public void DrawSquare(Vector2f pos, Color c)
     {
         RectangleShape rect = new(new Vector2f(SQUARE_RES, SQUARE_RES))
         {
-            Position = (Vector2f)pos + (20, 20),
+            Position = pos + (20, 20),
             FillColor = c,
         };
         _window.Draw(rect);

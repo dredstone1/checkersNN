@@ -58,7 +58,7 @@ public class Board
 
     public void ClearBoard()
     {
-        for (int i = 0; i < Display.GRID_SIZE*Display.GRID_SIZE; ++i)
+        for (int i = 0; i < 64; ++i)
             _board[i] = Cell.EMPTY_C;
     }
 
@@ -79,6 +79,11 @@ public class Board
     }
 
     void handleDestroy(int s1, int s2)
+    {
+        handleDestroyN(s1, s2);
+    }
+
+    void handleDestroyN(int s1, int s2)
     {
         Vector2i pos1 = IndexToPos(s1);
         Vector2i pos2 = IndexToPos(s2);
