@@ -1,10 +1,5 @@
 namespace Checkers.models;
 
-public enum PlayerType
-{
-    BLACK,
-    WHITE,
-}
 
 public interface IPlayer
 {

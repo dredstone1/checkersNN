@@ -2,6 +2,12 @@ using SFML.System;
 
 namespace Checkers.models;
 
+public enum PlayerType
+{
+    BLACK,
+    WHITE,
+}
+
 public class Game
 {
     IntPtr model;
@@ -31,8 +37,8 @@ public class Game
 
     bool checkMovmentType(int s1, int s2)
     {
-        Vector2i pos1 = _board.IndexToPos(s1);
-        Vector2i pos2 = _board.IndexToPos(s2);
+        Vector2i pos1 = Board.IndexToPos(s1);
+        Vector2i pos2 = Board.IndexToPos(s2);
 
         int dx = Math.Abs(pos1.X - pos2.X);
         int dy = Math.Abs(pos1.Y - pos2.Y);
@@ -49,7 +55,7 @@ public class Game
             {
                 Vector2i pos3 = pos1 + pos2 / 2;
 
-                if (_board.cells[_board.PosToIndex(pos3)] == Cell.EMPTY_C)
+                if (_board.cells[Board.PosToIndex(pos3)] == Cell.EMPTY_C)
                     return true;
             }
             else if (_board.PModeFromCellIndex(s1) == PlayerMode.NORMAL && dx != 1)

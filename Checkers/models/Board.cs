@@ -42,14 +42,14 @@ public class Board
         ClearBoard();
 
         ResetBoard(0, 3, Cell.BLACKN_C);
-        ResetBoard(5 * 8, 3, Cell.WHITEN_C);
+        ResetBoard(5 * Display.GRID_SIZE, 3, Cell.WHITEN_C);
     }
 
     void ResetBoard(int offset, int layers, Cell c)
     {
-        for (int i = offset; i < offset + layers * 8; ++i)
+        for (int i = offset; i < offset + layers * Display.GRID_SIZE; ++i)
         {
-            if ((i + i / 8) % 2 != 0)
+            if ((i + i / Display.GRID_SIZE) % 2 != 0)
                 continue;
 
             _board[i] = c;
@@ -58,7 +58,7 @@ public class Board
 
     public void ClearBoard()
     {
-        for (int i = 0; i < 64; ++i)
+        for (int i = 0; i < Display.GRID_SIZE*Display.GRID_SIZE; ++i)
             _board[i] = Cell.EMPTY_C;
     }
 
@@ -75,21 +75,10 @@ public class Board
 
     public PlayerType CellTypeToPlayerType(CellP c)
     {
-        if (c == CellP.BLACK_C)
-            return PlayerType.BLACK;
-
-        return PlayerType.WHITE;
+        return c == CellP.BLACK_C ? PlayerType.BLACK : PlayerType.WHITE;
     }
 
     void handleDestroy(int s1, int s2)
-    {
-        if (PModeFromCellIndex(s1) == PlayerMode.NORMAL)
-            handleDestroyN(s1, s2);
-        else
-            handleDestroyN(s1, s2);
-    }
-
-    void handleDestroyN(int s1, int s2)
     {
         Vector2i pos1 = IndexToPos(s1);
         Vector2i pos2 = IndexToPos(s2);
@@ -106,8 +95,6 @@ public class Board
         if (_board[i] != Cell.EMPTY_C)
             _board[i] = Cell.EMPTY_C;
     }
-
-    void handleDestroyQ(int s1, int s2) { }
 
     public void Move(int s1, int s2)
     {
@@ -131,22 +118,22 @@ public class Board
         return PlayerMode.NORMAL;
     }
 
-    public int PosToIndex(int x, int y)
+    public static int PosToIndex(int x, int y)
     {
-        return y * 8 + x;
+        return y * Display.GRID_SIZE + x;
     }
 
-    public int PosToIndex(Vector2i pos)
+    public static int PosToIndex(Vector2i pos)
     {
         return PosToIndex(pos.X, pos.Y);
     }
 
-    public Vector2i IndexToPos(int i)
+    public static Vector2i IndexToPos(int i)
     {
-        int x = i % 8;
-        int y = i / 8;
+        int x = i % Display.GRID_SIZE;
+        int y = i / Display.GRID_SIZE;
 
-        return new Vector2i(x, y);
+        return (x, y);
     }
 
     public int GetDDiagonl(int s1, int s2)
@@ -185,7 +172,7 @@ public class Board
             }
         }
 
-        for (int i = 64; i < 64 * 2; ++i)
+        for (int i = 64; i < 128; ++i)
         {
             if (_board[i - 64] == Cell.BLACKN_C)
                 data[i] = 1;
@@ -193,7 +180,7 @@ public class Board
                 data[i] = 0.5f;
         }
 
-        for (int i = 64 * 2; i < 64 * 3; ++i)
+        for (int i = 128; i < 192; ++i)
         {
             if (_board[i - 128] == Cell.WHITEN_C)
                 data[i] = 1;
