@@ -1,3 +1,5 @@
+using SFML.System;
+
 namespace Checkers.models;
 
 public class Game
@@ -29,14 +31,11 @@ public class Game
 
     bool checkMovmentType(int s1, int s2)
     {
-        int x1 = s1 % 8;
-        int y1 = s1 / 8;
+        Vector2i pos1 = _board.IndexToPos(s1);
+        Vector2i pos2 = _board.IndexToPos(s2);
 
-        int x2 = s2 % 8;
-        int y2 = s2 / 8;
-
-        int dx = Math.Abs(x1 - x2);
-        int dy = Math.Abs(y1 - y2);
+        int dx = Math.Abs(pos1.X - pos2.X);
+        int dy = Math.Abs(pos1.Y - pos2.Y);
 
         if (dx != dy)
             return true;
@@ -48,10 +47,9 @@ public class Game
 
             if (dx == 2)
             {
-                int x3 = (x1 + x2) / 2;
-                int y3 = (y1 + y2) / 2;
+                Vector2i pos3 = pos1 + pos2 / 2;
 
-                if (_board.cells[_board.PosToIndex(x3, y3)] == Cell.EMPTY_C)
+                if (_board.cells[_board.PosToIndex(pos3)] == Cell.EMPTY_C)
                     return true;
             }
             else if (_board.PModeFromCellIndex(s1) == PlayerMode.NORMAL && dx != 1)
@@ -87,8 +85,7 @@ public class Game
         if (_currentPlayer == PlayerType.BLACK)
         {
             float[] list = new float[128];
-            
-            Console.WriteLine($"rrr: {_board.getNNData()[0]}");
+
             Model.Model_Run(model, _board.getNNData(), list);
 
             int h1 = 0;
@@ -103,7 +100,7 @@ public class Game
                 if (list[h2 + 64] < list[i + 64])
                     h2 = i;
             }
-            Console.WriteLine($"h1: {h1}, h2: {h2}");
+            Console.WriteLine($"s1: {h1}, s2: {h2}");
 
             toggleCurrentPlayer();
         }

@@ -32,6 +32,8 @@ public class Board
     public Board()
     {
         ResetBoard();
+
+        // for testing
         _board[4] = Cell.WHITEQ_C;
     }
 
@@ -89,22 +91,18 @@ public class Board
 
     void handleDestroyN(int s1, int s2)
     {
-        int x1 = s1 % 8;
-        int y1 = s1 / 8;
+        Vector2i pos1 = IndexToPos(s1);
+        Vector2i pos2 = IndexToPos(s2);
 
-        int x2 = s2 % 8;
-        int y2 = s2 / 8;
-
-        int dx = Math.Abs(x1 - x2);
-        int dy = Math.Abs(y1 - y2);
+        int dx = Math.Abs(pos1.X - pos2.X);
+        int dy = Math.Abs(pos1.Y - pos2.Y);
 
         if (dx != dy || dx != 2)
             return;
 
-        int x3 = (x1 + x2) / 2;
-        int y3 = (y1 + y2) / 2;
+        Vector2i pos3 = pos1 + pos2 / 2;
 
-        int i = PosToIndex(x3, y3);
+        int i = PosToIndex(pos3);
         if (_board[i] != Cell.EMPTY_C)
             _board[i] = Cell.EMPTY_C;
     }
@@ -138,34 +136,36 @@ public class Board
         return y * 8 + x;
     }
 
-    public Vector2f IndexToPos(int i)
+    public int PosToIndex(Vector2i pos)
+    {
+        return PosToIndex(pos.X, pos.Y);
+    }
+
+    public Vector2i IndexToPos(int i)
     {
         int x = i % 8;
         int y = i / 8;
 
-        return new Vector2f(x, y);
+        return new Vector2i(x, y);
     }
 
     public int GetDDiagonl(int s1, int s2)
     {
-        int x1 = s1 % 8;
-        int y1 = s1 / 8;
+        Vector2i pos1 = IndexToPos(s1);
+        Vector2i pos2 = IndexToPos(s2);
 
-        int x2 = s2 % 8;
-        int y2 = s2 / 8;
-
-        int d = Math.Abs(x1 - x2);
+        int d = Math.Abs(pos1.X - pos2.X);
 
         int dx = 1,
             dy = 1;
-        if (x2 - x1 < 0)
+        if (pos2.X - pos1.X < 0)
             dx = -1;
-        if (y2 - y1 < 0)
+        if (pos2.Y - pos1.Y < 0)
             dy = -1;
 
         for (int i = 1; i < d; ++i)
         {
-            if (_board[PosToIndex(x1 + i * dx, y1 + i * dy)] == Cell.EMPTY_C)
+            if (_board[PosToIndex(pos1.X + i * dx, pos1.Y + i * dy)] == Cell.EMPTY_C)
                 continue;
             return i + 1;
         }
