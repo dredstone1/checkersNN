@@ -13,6 +13,9 @@ public class BitBoard
     public BoardBits Occupancy { get; private set; }
     public BoardBits Empty { get; private set; }
 
+    public int WhiteMaterial { get; private set; }
+    public int BlackMaterial { get; private set; }
+
     public ulong ZobristKey { get; private set; }
 
     public bool IsWhiteToMove { get; private set; } = true;
@@ -30,6 +33,15 @@ public class BitBoard
         {
             Bitboards[(int)piece.Color, (int)piece.Type] |= BitboardHelpers.One << point;
             PieceAt[point] = piece;
+
+            if (piece.Color is PieceColor.White)
+            {
+                WhiteMaterial += MaterialValue.GetPieceValue(piece.Type);
+            }
+            else
+            {
+                BlackMaterial += MaterialValue.GetPieceValue(piece.Type);
+            }
         }
 
         for (int i = 0; i < Enum.GetValues<PieceType>().Length; i++)
@@ -68,6 +80,9 @@ public class BitBoard
         BlackPieces = other.BlackPieces;
         Occupancy = other.Occupancy;
         Empty = other.Empty;
+        WhiteMaterial = other.WhiteMaterial;
+        BlackMaterial = other.BlackMaterial;
+
         IsWhiteToMove = other.IsWhiteToMove;
         ZobristKey = other.ZobristKey;
     }
@@ -238,11 +253,11 @@ public class BitBoard
         {
             case PieceColor.White:
                 WhitePieces &= inverseMask;
-
+                WhiteMaterial -= MaterialValue.GetPieceValue(pieceType);
                 break;
             case PieceColor.Black:
                 BlackPieces &= inverseMask;
-
+                BlackMaterial -= MaterialValue.GetPieceValue(pieceType);
                 break;
         }
         PieceAt[at] = null;
@@ -264,9 +279,11 @@ public class BitBoard
         {
             case PieceColor.White:
                 WhitePieces |= mask;
+                WhiteMaterial += MaterialValue.GetPieceValue(type);
                 break;
             case PieceColor.Black:
                 BlackPieces |= mask;
+                BlackMaterial += MaterialValue.GetPieceValue(type);
                 break;
         }
         PieceAt[at] = new Piece() { Type = type, Color = color };

@@ -2,7 +2,17 @@
 
 public static class Evaluator
 {
-    public static int Evaluate(BitBoard board) => 0;
+    public static int Evaluate(BitBoard board)
+    {
+        if (board.IsWhiteToMove)
+        {
+            return board.WhiteMaterial - board.BlackMaterial;
+        }
+        else
+        {
+            return board.BlackMaterial - board.WhiteMaterial;
+        }
+    }
 
     public static bool TryEvaluateTermination(BitBoard board, int depth, out int terminationEval)
     {
