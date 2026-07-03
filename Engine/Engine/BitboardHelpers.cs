@@ -30,8 +30,6 @@ public static class BitboardHelpers
         bitboard &= bitboard - 1;
         return (byte)index;
     }
-
-    public static BoardBits One => UInt128.One;
 #elif BOARD_8
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static byte BitScanForward(ref BoardBits bitboard)
@@ -45,8 +43,6 @@ public static class BitboardHelpers
         bitboard &= bitboard - 1;
         return (byte)index;
     }
-
-    public static BoardBits One => 1ul;
 #endif
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

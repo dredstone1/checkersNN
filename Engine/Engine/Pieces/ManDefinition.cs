@@ -12,7 +12,7 @@ public class ManDefinition : IPieceDefinition
         ref int moveCount
     )
     {
-        BoardBits positionBit = BitboardHelpers.One << position;
+        BoardBits positionBit = BitboardConstants.One << position;
         var (left, right, jumpLeft, jumpRight, diagonals) =
             piece.Color is PieceColor.White
                 ? GenerateWhite(board, piece, positionBit)
@@ -26,7 +26,7 @@ public class ManDefinition : IPieceDefinition
         while (nonJump != 0)
         {
             byte to = BitboardHelpers.BitScanForward(ref nonJump);
-            BoardBits toBit = BitboardHelpers.One << to;
+            BoardBits toBit = BitboardConstants.One << to;
             moves[moveCount++] = new()
             {
                 From = position,

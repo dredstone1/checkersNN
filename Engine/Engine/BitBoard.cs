@@ -31,7 +31,7 @@ public class BitBoard
 
         foreach (var (point, piece) in pieces)
         {
-            Bitboards[(int)piece.Color, (int)piece.Type] |= BitboardHelpers.One << point;
+            Bitboards[(int)piece.Color, (int)piece.Type] |= BitboardConstants.One << point;
             PieceAt[point] = piece;
 
             if (piece.Color is PieceColor.White)
@@ -221,8 +221,8 @@ public class BitBoard
 
         ref BoardBits bitboard = ref BitboardFor(pieceType, color);
 
-        BoardBits fromMask = BitboardHelpers.One << from;
-        BoardBits toMask = BitboardHelpers.One << to;
+        BoardBits fromMask = BitboardConstants.One << from;
+        BoardBits toMask = BitboardConstants.One << to;
         bitboard &= ~fromMask;
         bitboard |= toMask;
 
@@ -243,7 +243,7 @@ public class BitBoard
 
     private void RemovePiece(PieceType pieceType, PieceColor color, byte at)
     {
-        BoardBits atMask = BitboardHelpers.One << at;
+        BoardBits atMask = BitboardConstants.One << at;
         BoardBits inverseMask = ~atMask;
 
         ref BoardBits bitboard = ref BitboardFor(pieceType, color);
@@ -271,7 +271,7 @@ public class BitBoard
             RemovePiece(piece.Value.Type, piece.Value.Color, at);
         }
 
-        BoardBits mask = BitboardHelpers.One << at;
+        BoardBits mask = BitboardConstants.One << at;
         ref BoardBits bitboard = ref BitboardFor(type, color);
         bitboard |= mask;
 

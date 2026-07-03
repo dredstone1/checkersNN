@@ -53,7 +53,7 @@ public class KingDefinition : IPieceDefinition
                 From = position,
                 To = (byte)(toY * Constants.BoardSize + toX),
                 Piece = piece,
-                CapturesMask = BitboardHelpers.One << to,
+                CapturesMask = BitboardConstants.One << to,
             };
         }
     }

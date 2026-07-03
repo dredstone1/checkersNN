@@ -27,12 +27,18 @@ public static class BitboardConstants
 
     public static readonly BoardBits NotEdgeMasks = ~EdgeMasks;
 
+#if BOARD_10
+    public static BoardBits One => UInt128.One;
+#elif BOARD_8
+    public static BoardBits One => 1ul;
+#endif
+
     private static BoardBits MakeFileMask(int file)
     {
         BoardBits mask = 0;
         for (int rank = 0; rank < Constants.BoardSize; rank++)
         {
-            mask |= BitboardHelpers.One << (rank * Constants.BoardSize + file);
+            mask |= BitboardConstants.One << (rank * Constants.BoardSize + file);
         }
         return mask;
     }
@@ -42,7 +48,7 @@ public static class BitboardConstants
         BoardBits mask = 0;
         for (int file = 0; file < Constants.BoardSize; file++)
         {
-            mask |= BitboardHelpers.One << (rank * Constants.BoardSize + file);
+            mask |= BitboardConstants.One << (rank * Constants.BoardSize + file);
         }
         return mask;
     }
