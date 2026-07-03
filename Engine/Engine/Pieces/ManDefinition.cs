@@ -13,7 +13,7 @@ public class ManDefinition : IPieceDefinition
     )
     {
         BoardBits positionBit = BitboardHelpers.One << position;
-        var (upLeft, upRight, jumpUpLeft, jumpUpRight, diagonals) =
+        var (left, right, jumpLeft, jumpRight, diagonals) =
             piece.Color is PieceColor.White
                 ? GenerateWhite(board, piece, positionBit)
                 : GenerateBlack(board, piece, positionBit);
@@ -26,36 +26,37 @@ public class ManDefinition : IPieceDefinition
         while (nonJump != 0)
         {
             byte to = BitboardHelpers.BitScanForward(ref nonJump);
+            BoardBits toBit = BitboardHelpers.One << to;
             moves[moveCount++] = new()
             {
                 From = position,
                 To = to,
                 Piece = piece,
-                IsPromotion = (to & promotionMask) != 0,
+                IsPromotion = (toBit & promotionMask) != 0,
             };
         }
 
-        if (jumpUpLeft != 0)
+        if (jumpLeft != 0)
         {
-            bool isPromotion = (jumpUpLeft & promotionMask) != 0;
+            bool isPromotion = (jumpLeft & promotionMask) != 0;
             moves[moveCount++] = new()
             {
                 From = position,
-                To = BitboardHelpers.BitScanForward(ref jumpUpLeft),
+                To = BitboardHelpers.BitScanForward(ref jumpLeft),
                 Piece = piece,
-                CapturesMask = upLeft,
+                CapturesMask = left,
                 IsPromotion = isPromotion,
             };
         }
-        if (jumpUpRight != 0)
+        if (jumpRight != 0)
         {
-            bool isPromotion = (jumpUpRight & promotionMask) != 0;
+            bool isPromotion = (jumpRight & promotionMask) != 0;
             moves[moveCount++] = new()
             {
                 From = position,
-                To = BitboardHelpers.BitScanForward(ref jumpUpRight),
+                To = BitboardHelpers.BitScanForward(ref jumpRight),
                 Piece = piece,
-                CapturesMask = upRight,
+                CapturesMask = right,
                 IsPromotion = isPromotion,
             };
         }
