@@ -44,7 +44,7 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
         if (depth <= 0)
         {
             return isLastMoveCapture
-                ? Quiescence(board, alpha, beta, depth: 4, initialDepth: depth)
+                ? Quiescence(board, alpha, beta, depth)
                 : Evaluator.Evaluate(board);
         }
 
@@ -154,7 +154,7 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
         return alpha;
     }
 
-    private int Quiescence(BitBoard board, int alpha, int beta, int depth, int initialDepth)
+    private int Quiescence(BitBoard board, int alpha, int beta, int depth)
     {
         if (
             _transpositionTable.TryProbe(
@@ -170,13 +170,7 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
             return ttScore;
         }
 
-        if (
-            Evaluator.TryEvaluateTermination(
-                board,
-                depth: initialDepth - depth,
-                out int terminationEval
-            )
-        )
+        if (Evaluator.TryEvaluateTermination(board, depth, out int terminationEval))
         {
             return terminationEval;
         }
@@ -192,11 +186,6 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
             alpha = standPat;
         }
 
-        if (depth <= 0)
-        {
-            return alpha;
-        }
-
         Span<Move> moves = stackalloc Move[Constants.MaxMoves];
         int moveCount = 0;
         MoveGenerator.Generate(board, moves, ref moveCount);
@@ -207,7 +196,6 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
 
         int captureCount = 0;
         Span<Move> captures = stackalloc Move[moveCount];
-        int maxCaptureValue = 0;
         for (int i = 0; i < moveCount; i++)
         {
             Move move = moves[i];
@@ -216,33 +204,13 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
                 continue;
             }
 
-            BoardBits capturesMask = move.CapturesMask;
-            byte firstCaptureAt = BitboardHelpers.BitScanForward(ref capturesMask);
-            Piece? capturedPiece = board.GetPieceAt(firstCaptureAt);
-            if (capturedPiece is null)
-            {
-                continue;
-            }
-
-            int captureValue = MaterialValue.GetPieceValue(capturedPiece.Value.Type);
-            maxCaptureValue = Math.Max(maxCaptureValue, captureValue);
-            if (standPat + captureValue + Constants.DeltaPruningMargin < alpha)
-            {
-                continue;
-            }
-
             captures[captureCount++] = move;
-        }
-
-        if (standPat + maxCaptureValue + Constants.DeltaPruningMargin < alpha)
-        {
-            return alpha;
         }
 
         Span<int> scores = stackalloc int[captureCount];
         MoveOrdering.ScoreMoves(
             board,
-            initialDepth,
+            depth,
             _killerMoves,
             _historyHeuristic,
             packedTtMove: ttMove,
@@ -256,7 +224,7 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
             Move move = MoveOrdering.GetNextHighestMove(i, captures, scores, captureCount);
 
             MoveUndoState undo = board.MakeMove(move);
-            int score = -Quiescence(board, -beta, -alpha, depth - 1, initialDepth);
+            int score = -Quiescence(board, -beta, -alpha, depth);
             board.UndoMove(undo);
 
             if (score >= beta)
