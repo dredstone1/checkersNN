@@ -194,20 +194,13 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
             return 0;
         }
 
-        int captureCount = 0;
-        Span<Move> captures = stackalloc Move[moveCount];
-        for (int i = 0; i < moveCount; i++)
+        // because captures are forced we know if any move is a capture all moves are captures
+        if (moves[0].CapturesMask == 0)
         {
-            Move move = moves[i];
-            if (move.CapturesMask == 0)
-            {
-                continue;
-            }
-
-            captures[captureCount++] = move;
+            return standPat;
         }
 
-        Span<int> scores = stackalloc int[captureCount];
+        Span<int> scores = stackalloc int[moveCount];
         MoveOrdering.ScoreMoves(
             board,
             depth,
@@ -215,13 +208,13 @@ internal sealed class SearchThread(TranspositionTable transpositionTable, int ma
             _historyHeuristic,
             packedTtMove: ttMove,
             scores,
-            captures,
-            captureCount
+            moves,
+            moveCount
         );
 
-        for (int i = 0; i < captureCount; i++)
+        for (int i = 0; i < moveCount; i++)
         {
-            Move move = MoveOrdering.GetNextHighestMove(i, captures, scores, captureCount);
+            Move move = MoveOrdering.GetNextHighestMove(i, moves, scores, moveCount);
 
             MoveUndoState undo = board.MakeMove(move);
             int score = -Quiescence(board, -beta, -alpha, depth);

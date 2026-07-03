@@ -28,6 +28,20 @@ public class MoveGenerator
             moves,
             ref moveCount
         );
+
+        int captureCount = 0;
+        for (int i = 0; i < moveCount; i++)
+        {
+            Move move = moves[i];
+            if (move.CapturesMask != 0)
+            {
+                moves[captureCount++] = move;
+            }
+        }
+        if (captureCount > 0)
+        {
+            moveCount = captureCount;
+        }
     }
 
     public static void GenerateForPiece(
