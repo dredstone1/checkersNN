@@ -48,5 +48,15 @@ public class ManTestData : TheoryData<PieceTestCase>
                 .GoesTo("g3", captures: ["f4"])
                 .WithDescription("Black only captures enemy")
         );
+
+        Add(
+            PieceTestCase
+                .From("e3", whiteMan)
+                .WithEnemyPieceAt("f4")
+                .WithFriendlyPieceAt("g5")
+                .WithEnemyPieceAt("d4")
+                .WithFriendlyPieceAt("c5")
+                .WithDescription("You can only jump over 1 piece to capture")
+        );
     }
 }

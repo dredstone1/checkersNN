@@ -36,7 +36,7 @@ public class ManDefinition : IPieceDefinition
             };
         }
 
-        if (jumpLeft != 0)
+        if ((jumpLeft & board.Empty) != 0)
         {
             bool isPromotion = (jumpLeft & promotionMask) != 0;
             moves[moveCount++] = new()
@@ -48,7 +48,7 @@ public class ManDefinition : IPieceDefinition
                 IsPromotion = isPromotion,
             };
         }
-        if (jumpRight != 0)
+        if ((jumpRight & board.Empty) != 0)
         {
             bool isPromotion = (jumpRight & promotionMask) != 0;
             moves[moveCount++] = new()
