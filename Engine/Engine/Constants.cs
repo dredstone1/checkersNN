@@ -14,7 +14,7 @@ public static class Constants
     public const int AlphaStart = -10_000_000;
     public const int BetaStart = 10_000_000;
 
-    public const int MaxDepth = 32;
+    public const int MaxDepth = 64;
     public const int MaxMoves = 128;
 
     public const int NullMoveReduction = 2;
