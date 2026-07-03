@@ -21,14 +21,32 @@ public class ManTestData : TheoryData<PieceTestCase>
             PieceTestCase
                 .From("e3", whiteMan)
                 .GoesTo("d4", "f4")
-                .WithDescription("White man goes forwards")
+                .WithDescription("White goes forwards")
+        );
+
+        Add(
+            PieceTestCase
+                .From("e3", whiteMan)
+                .WithFriendlyPieceAt("d4")
+                .WithEnemyPieceAt("f4")
+                .GoesTo("g5", captures: ["f4"])
+                .WithDescription("White only captures enemy")
         );
 
         Add(
             PieceTestCase
                 .From("e3", blackMan)
                 .GoesTo("d2", "f2")
-                .WithDescription("Black man goes backwards")
+                .WithDescription("Black goes backwards")
+        );
+
+        Add(
+            PieceTestCase
+                .From("e5", blackMan)
+                .WithFriendlyPieceAt("d4")
+                .WithEnemyPieceAt("f4")
+                .GoesTo("g3", captures: ["f4"])
+                .WithDescription("Black only captures enemy")
         );
     }
 }
