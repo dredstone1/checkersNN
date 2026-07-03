@@ -1,4 +1,5 @@
-﻿using Engine;
+﻿using System.Diagnostics;
+using Engine;
 using Engine.Models;
 
 BitBoard board = new(
@@ -33,11 +34,22 @@ BitBoard board = new(
     isWhiteToMove: true
 );
 
-var (bestMove, evalForBot) = CheckersEngine.FindBestMove(board, depth: 20);
+Stopwatch sw = Stopwatch.StartNew();
+var (bestMove, evalForBot) = CheckersEngine.FindBestMove(board, depth: 45);
+sw.Stop();
 if (bestMove is null)
 {
     return;
 }
+
 Console.WriteLine(
-    $"From: {bestMove.Value.From}, To: {bestMove.Value.To}, evalForBot: {evalForBot}"
+    $"From: {IdxToAlgebraic(bestMove.Value.From)}, To: {IdxToAlgebraic(bestMove.Value.To)}, evalForBot: {evalForBot}, It took {sw.Elapsed}"
 );
+
+static string IdxToAlgebraic(byte idx)
+{
+    int y = idx / Constants.BoardSize;
+    int x = idx % Constants.BoardSize;
+    char rank = (char)('a' + x);
+    return $"{rank}{y + 1}";
+}
