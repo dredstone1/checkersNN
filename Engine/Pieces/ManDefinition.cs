@@ -17,6 +17,10 @@ public class ManDefinition : IPieceDefinition
             piece.Color is PieceColor.White
                 ? GenerateWhite(board, piece, positionBit)
                 : GenerateBlack(board, piece, positionBit);
+        BoardBits promotionMask =
+            piece.Color is PieceColor.White
+                ? BitboardConstants.TopEdgeMask
+                : BitboardConstants.BottomEdgeMask;
 
         BoardBits nonJump = diagonals & board.Empty;
         while (nonJump != 0)
@@ -27,13 +31,13 @@ public class ManDefinition : IPieceDefinition
                 From = position,
                 To = to,
                 Piece = piece,
-                IsPromotion = (to & BitboardConstants.TopEdgeMask) != 0,
+                IsPromotion = (to & promotionMask) != 0,
             };
         }
 
         if (jumpUpLeft != 0)
         {
-            bool isPromotion = (jumpUpLeft & BitboardConstants.TopEdgeMask) != 0;
+            bool isPromotion = (jumpUpLeft & promotionMask) != 0;
             moves[moveCount++] = new()
             {
                 From = position,
@@ -45,7 +49,7 @@ public class ManDefinition : IPieceDefinition
         }
         if (jumpUpRight != 0)
         {
-            bool isPromotion = (jumpUpRight & BitboardConstants.TopEdgeMask) != 0;
+            bool isPromotion = (jumpUpRight & promotionMask) != 0;
             moves[moveCount++] = new()
             {
                 From = position,
