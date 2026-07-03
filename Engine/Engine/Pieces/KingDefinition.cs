@@ -48,10 +48,17 @@ public class KingDefinition : IPieceDefinition
             toX -= dx;
             toY -= dy;
 
+            byte toIdx = (byte)(toY * Constants.BoardSize + toX);
+            BoardBits toBit = BitboardConstants.One << toIdx;
+            if ((toBit & board.Occupancy) != 0)
+            {
+                return;
+            }
+
             moves[moveCount++] = new()
             {
                 From = position,
-                To = (byte)(toY * Constants.BoardSize + toX),
+                To = toIdx,
                 Piece = piece,
                 CapturesMask = BitboardConstants.One << to,
             };

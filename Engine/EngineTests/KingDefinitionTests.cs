@@ -34,5 +34,14 @@ public class KingTestData : TheoryData<PieceTestCase>
                 .GoesTo("d4", "c3", "b2", "d6", "c7", "b8", "f6", "g7", "h8", "f4", "g3", "h2")
                 .WithDescription("King doesn't capture beyond the board")
         );
+
+        Add(
+            PieceTestCase
+                .From("e5", king)
+                .WithEnemyPieceAt("c3")
+                .WithEnemyPieceAt("b2")
+                .GoesTo("d4", "d6", "c7", "b8", "f6", "g7", "h8", "f4", "g3", "h2")
+                .WithDescription("King can't capture if there is a piece blocking beyond")
+        );
     }
 }
