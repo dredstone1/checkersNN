@@ -73,17 +73,12 @@ public class Board
         return CellP.WHITE_C;
     }
 
-    public PlayerType CellTypeToPlayerType(CellP c)
+    static public PlayerType CellTypeToPlayerType(CellP c)
     {
         return c == CellP.BLACK_C ? PlayerType.BLACK : PlayerType.WHITE;
     }
 
     void handleDestroy(int s1, int s2)
-    {
-        handleDestroyN(s1, s2);
-    }
-
-    void handleDestroyN(int s1, int s2)
     {
         Vector2i pos1 = IndexToPos(s1);
         Vector2i pos2 = IndexToPos(s2);

@@ -74,7 +74,7 @@ public class Game
 
         if (
             cellType2 != CellP.EMPTY_C
-            || _board.CellTypeToPlayerType(cellType1) != _currentPlayer
+            || Board.CellTypeToPlayerType(cellType1) != _currentPlayer
             || checkMovmentType(s1, s2)
         )
             return false;
@@ -132,7 +132,12 @@ public class Game
         Console.WriteLine("Checkers starting");
         _display.StartDisplay();
 
+        String modelParamsPath = "../Params.P";
+        char[] Path = modelParamsPath.ToCharArray();
+
+        //Model.Model_Load(model, Path, Path.Length);
         GameLoop();
+        Model.Model_Save(model, Path, Path.Length);
 
         _display.CloseDisplay();
     }

@@ -9,4 +9,10 @@ public class Model
 
     [DllImport("../../../../NeuralNetwork/build/libNeuralNetwork.so")]
     public static extern void Model_Run(IntPtr model, float[] input, float[] output);
+
+    [DllImport("../../../../NeuralNetwork/build/libNeuralNetwork.so")]
+    public static extern void Model_Save(IntPtr model, char[] path, int l);
+
+    [DllImport("../../../../NeuralNetwork/build/libNeuralNetwork.so")]
+    public static extern void Model_Load(IntPtr model, char[] path, int i);
 }

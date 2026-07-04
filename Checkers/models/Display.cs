@@ -49,12 +49,9 @@ public class Display
         DrawPlayers();
     }
 
-    Color getPLayerColor(Cell c)
+    static Color getPLayerColor(Cell c)
     {
-        if (c == Cell.BLACKN_C || c == Cell.BLACKQ_C)
-            return Color.Black;
-
-        return Color.White;
+        return (c == Cell.BLACKN_C || c == Cell.BLACKQ_C) ? Color.Black : Color.White; 
     }
 
     void DrawPlayers()
@@ -65,12 +62,13 @@ public class Display
                 continue;
 
             Vector2i pos = Board.IndexToPos(i);
+            pos *= SQUARE_RES;
 
             if (i == cellselected1)
                 pos += (10, 10);
 
             DrawPlayer(
-                (Vector2f)pos * SQUARE_RES,
+                (Vector2f)pos,
                 getPLayerColor(_board.cells[i]),
                 isQueen(_board.cells[i])
             );
@@ -143,7 +141,7 @@ public class Display
         };
     }
 
-    int getIndexFromPos(Vector2i pos)
+    static int getIndexFromPos(Vector2i pos)
     {
         int x = pos.X / SQUARE_RES;
         int y = pos.Y / SQUARE_RES;
