@@ -91,24 +91,33 @@ public class Game
         return model != 0;
     }
 
+    public static (int h1, int h2) TransformAiOut(float[] list)
+    {
+        int h1 = 0;
+        int h2 = 0;
+
+        for (int i = 0; i < 64; i++)
+        {
+            if (list[h1] < list[i])
+                h1 = i;
+        }
+
+        for (int i = 0; i < 64; i++)
+        {
+            if (list[h2 + 64] < list[i + 64])
+                h2 = i;
+        }
+
+        return (h1, h2);
+    }
+
     void runAi()
     {
         float[] list = new float[128];
 
         Model.Model_Run(model, _board.getNNData(), list);
 
-        int h1 = 0;
-        int h2 = 0;
-        for (int i = 0; i < 64; ++i)
-        {
-            if (list[h1] < list[i])
-                h1 = i;
-        }
-        for (int i = 0; i < 64; ++i)
-        {
-            if (list[h2 + 64] < list[i + 64])
-                h2 = i;
-        }
+        var (h1, h2) = TransformAiOut(list);
         Console.WriteLine($"model out s1: {h1}, s2: {h2}");
     }
 
