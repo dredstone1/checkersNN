@@ -15,4 +15,7 @@ public class Model
 
     [DllImport("../../../../NeuralNetwork/build/libNeuralNetwork.so")]
     public static extern void Model_Load(IntPtr model, char[] path, int i);
+
+    [DllImport("../../../../NeuralNetwork/build/libNeuralNetwork.so")]
+    public static extern void Model_train(IntPtr model, char[] PT, char[] PE); // Path Training, Path Evaluating
 }

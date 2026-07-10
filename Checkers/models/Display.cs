@@ -51,7 +51,7 @@ public class Display
 
     static Color getPLayerColor(Cell c)
     {
-        return (c == Cell.BLACKN_C || c == Cell.BLACKQ_C) ? Color.Black : Color.White; 
+        return (c == Cell.BLACKN_C || c == Cell.BLACKQ_C) ? Color.Black : Color.White;
     }
 
     void DrawPlayers()
@@ -67,11 +67,7 @@ public class Display
             if (i == cellselected1)
                 pos += (10, 10);
 
-            DrawPlayer(
-                (Vector2f)pos,
-                getPLayerColor(_board.cells[i]),
-                isQueen(_board.cells[i])
-            );
+            DrawPlayer((Vector2f)pos, getPLayerColor(_board.cells[i]), isQueen(_board.cells[i]));
         }
     }
 
@@ -137,6 +133,14 @@ public class Display
             if (e.Button == Mouse.Button.Left)
             {
                 HandleMove(e.Position);
+            }
+        };
+
+        _window.KeyPressed += (sender, e) =>
+        {
+            if (e.Code == Keyboard.Key.Escape)
+            {
+                CloseDisplay();
             }
         };
     }

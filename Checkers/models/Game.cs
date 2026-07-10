@@ -106,7 +106,7 @@ public class Game
                 if (list[h2 + 64] < list[i + 64])
                     h2 = i;
             }
-            Console.WriteLine($"s1: {h1}, s2: {h2}");
+            Console.WriteLine($"model out s1: {h1}, s2: {h2}");
 
             toggleCurrentPlayer();
         }
@@ -117,27 +117,43 @@ public class Game
         }
     }
 
+    bool IsRunning()
+    {
+        return (_running && _display.IsRunning);
+    }
+
     public void GameLoop()
     {
         _running = true;
 
-        while (_running && _display.IsRunning)
+        while (IsRunning())
         {
             update();
         }
     }
 
-    public void Start()
+    public void Start(bool load = false, bool save = false, bool train = false)
     {
         Console.WriteLine("Checkers starting");
         _display.StartDisplay();
 
-        String modelParamsPath = "../Params.P";
+        String modelParamsPath = "../Params.Param";
         char[] Path = modelParamsPath.ToCharArray();
 
-        //Model.Model_Load(model, Path, Path.Length);
+        if (load)
+            Model.Model_Load(model, Path, Path.Length);
+
+        if (train)
+        {
+            String PD = "";
+            String PE = "";
+            Model.Model_train(model, PD.ToCharArray(), PE.ToCharArray());
+        }
+
         GameLoop();
-        Model.Model_Save(model, Path, Path.Length);
+
+        if (save)
+            Model.Model_Save(model, Path, Path.Length);
 
         _display.CloseDisplay();
     }
