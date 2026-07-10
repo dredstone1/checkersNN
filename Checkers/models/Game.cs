@@ -83,11 +83,16 @@ public class Game
         return true;
     }
 
+    bool isModel()
+    {
+        return model != 0;
+    }
+
     void update()
     {
         _display.Update();
 
-        if (_currentPlayer == PlayerType.BLACK)
+        if (isModel() && _currentPlayer == PlayerType.BLACK)
         {
             float[] list = new float[128];
 
@@ -131,27 +136,44 @@ public class Game
         }
     }
 
-    public void Start(bool load = false, bool save = false, bool train = false)
+    bool make_model()
     {
         model = Model.Model_Create();
-        if (model == 0){
-            Console.WriteLine("Error");
-            return;
+
+        if (model == 0)
+        {
+            Console.WriteLine("Out of memory");
+            return true;
         }
-        Console.WriteLine("Checkers starting");
+
+        return false;
+    }
+
+    public void Start(bool AI = false, bool load = false, bool save = false, bool train = false)
+    {
+        load &= AI;
+        save &= AI;
+        train &= AI;
+
+        if (AI && make_model())
+            return;
 
         _display.StartDisplay();
 
-        String modelParamsPath = "../Params.Param";
-        char[] Path = modelParamsPath.ToCharArray();
+        Console.WriteLine("Checkers starting");
+
+        char[] Path = "../Params.Param".ToCharArray();
 
         if (load)
             Model.Model_Load(model, Path, Path.Length);
 
         if (train)
         {
+            // TODO:
+            // add the nndb file path
             String PD = "";
             String PE = "";
+
             Model.Model_train(model, PD.ToCharArray(), PE.ToCharArray());
         }
 
