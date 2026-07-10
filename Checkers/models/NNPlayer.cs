@@ -8,6 +8,9 @@ public class Model
     public static extern IntPtr Model_Create();
 
     [DllImport("../../../../NeuralNetwork/build/libNeuralNetwork.so")]
+    public static extern void Model_Delete(out IntPtr modelPtr);
+
+    [DllImport("../../../../NeuralNetwork/build/libNeuralNetwork.so")]
     public static extern void Model_Run(IntPtr model, float[] input, float[] output);
 
     [DllImport("../../../../NeuralNetwork/build/libNeuralNetwork.so")]

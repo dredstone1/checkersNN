@@ -22,7 +22,6 @@ public class Game
     {
         _board = new();
         _display = new Display(_board);
-        model = Model.Model_Create();
     }
 
     void toggleCurrentPlayer()
@@ -134,7 +133,13 @@ public class Game
 
     public void Start(bool load = false, bool save = false, bool train = false)
     {
+        model = Model.Model_Create();
+        if (model == 0){
+            Console.WriteLine("Error");
+            return;
+        }
         Console.WriteLine("Checkers starting");
+
         _display.StartDisplay();
 
         String modelParamsPath = "../Params.Param";
@@ -156,5 +161,6 @@ public class Game
             Model.Model_Save(model, Path, Path.Length);
 
         _display.CloseDisplay();
+        Model.Model_Delete(out model);
     }
 }
