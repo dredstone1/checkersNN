@@ -11,6 +11,8 @@ public enum PlayerType
 public class Game
 {
     IntPtr model;
+    bool BlackAI = false,
+        WhiteAI = false;
 
     private PlayerType _currentPlayer = PlayerType.WHITE;
     private bool _running = false;
@@ -80,6 +82,7 @@ public class Game
 
         _board.Move(s1, s2);
         toggleCurrentPlayer();
+        _display.cancelAI = false;
         return true;
     }
 
@@ -88,30 +91,49 @@ public class Game
         return model != 0;
     }
 
+    void runAi()
+    {
+        float[] list = new float[128];
+
+        Model.Model_Run(model, _board.getNNData(), list);
+
+        int h1 = 0;
+        int h2 = 0;
+        for (int i = 0; i < 64; ++i)
+        {
+            if (list[h1] < list[i])
+                h1 = i;
+        }
+        for (int i = 0; i < 64; ++i)
+        {
+            if (list[h2 + 64] < list[i + 64])
+                h2 = i;
+        }
+        Console.WriteLine($"model out s1: {h1}, s2: {h2}");
+    }
+
+    private bool isAiTurn()
+    {
+        if (_display.cancelAI)
+            return false;
+
+        return _currentPlayer switch
+        {
+            PlayerType.BLACK => BlackAI,
+            PlayerType.WHITE => WhiteAI,
+            _ => false,
+        };
+    }
+
     void update()
     {
         _display.Update();
 
-        if (isModel() && _currentPlayer == PlayerType.BLACK)
+        if (isModel() && isAiTurn())
         {
-            float[] list = new float[128];
+            _display.resetSelection();
 
-            Model.Model_Run(model, _board.getNNData(), list);
-
-            int h1 = 0;
-            int h2 = 0;
-            for (int i = 0; i < 64; ++i)
-            {
-                if (list[h1] < list[i])
-                    h1 = i;
-            }
-            for (int i = 0; i < 64; ++i)
-            {
-                if (list[h2 + 64] < list[i + 64])
-                    h2 = i;
-            }
-            Console.WriteLine($"model out s1: {h1}, s2: {h2}");
-
+            runAi();
             toggleCurrentPlayer();
         }
         else if (_display.cellselected2 != -1)
@@ -149,8 +171,19 @@ public class Game
         return false;
     }
 
-    public void Start(bool AI = false, bool load = false, bool save = false, bool train = false)
+    public void Start(
+        bool AIB = false,
+        bool AIW = false,
+        bool load = false,
+        bool save = false,
+        bool train = false
+    )
     {
+        WhiteAI = AIW;
+        BlackAI = AIB;
+
+        Console.WriteLine($"test: {WhiteAI}, {BlackAI}");
+        bool AI = AIB || AIW;
         load &= AI;
         save &= AI;
         train &= AI;

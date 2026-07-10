@@ -16,6 +16,8 @@ public class Display
         get { return running; }
     }
 
+    public bool cancelAI = false;
+
     private readonly RenderWindow _window;
 
     private readonly Board _board;
@@ -141,6 +143,10 @@ public class Display
             if (e.Code == Keyboard.Key.Escape)
             {
                 CloseDisplay();
+            }
+            else if (e.Code == Keyboard.Key.Space)
+            {
+                cancelAI = true;
             }
         };
     }

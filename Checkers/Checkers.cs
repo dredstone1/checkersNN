@@ -9,7 +9,8 @@ namespace Checkers
             bool load = false,
                 save = false,
                 train = false,
-                AI = false;
+                AIB = false,
+                AIW = false;
 
             if (args.Contains("-t"))
                 train = true;
@@ -17,11 +18,13 @@ namespace Checkers
                 save = true;
             if (args.Contains("-l"))
                 load = true;
-            if (args.Contains("-A"))
-                AI = true;
+            if (args.Contains("-b"))
+                AIB = true;
+            if (args.Contains("-w"))
+                AIW = true;
 
             Game game = new Game();
-            game.Start(AI, load, save, train);
+            game.Start(AIB, AIW, load, save, train);
         }
     }
 }
