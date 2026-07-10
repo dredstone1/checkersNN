@@ -96,13 +96,13 @@ public class Game
         int h1 = 0;
         int h2 = 0;
 
-        for (int i = 0; i < 64; i++)
+        for (int i = 0; i < 64; ++i)
         {
             if (list[h1] < list[i])
                 h1 = i;
         }
 
-        for (int i = 0; i < 64; i++)
+        for (int i = 0; i < 64; ++i)
         {
             if (list[h2 + 64] < list[i + 64])
                 h2 = i;

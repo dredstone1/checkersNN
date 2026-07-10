@@ -73,7 +73,7 @@ public class Board
         return CellP.WHITE_C;
     }
 
-    static public PlayerType CellTypeToPlayerType(CellP c)
+    public static PlayerType CellTypeToPlayerType(CellP c)
     {
         return c == CellP.BLACK_C ? PlayerType.BLACK : PlayerType.WHITE;
     }
@@ -154,6 +154,7 @@ public class Board
         {
             if (_board[PosToIndex(pos1.X + i * dx, pos1.Y + i * dy)] == Cell.EMPTY_C)
                 continue;
+
             return i + 1;
         }
 
@@ -167,9 +168,7 @@ public class Board
         for (int i = 0; i < 64; ++i)
         {
             if (_board[i] == Cell.EMPTY_C)
-            {
                 data[i] = 1;
-            }
         }
 
         for (int i = 64; i < 128; ++i)
