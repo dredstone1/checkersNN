@@ -108,7 +108,8 @@ public class Game
                 h2 = i;
         }
 
-        return (h1, h2);
+        // return (h1, h2);
+        return (47, 38);
     }
 
     void runAi()
@@ -118,7 +119,10 @@ public class Game
         Model.Model_Run(model, _board.getNNData(), list);
 
         var (h1, h2) = TransformAiOut(list);
+
+        AttemptMove(h1, h2);
         Console.WriteLine($"model out s1: {h1}, s2: {h2}");
+        _display.cancelAI = true;
     }
 
     private bool isAiTurn()
@@ -140,13 +144,11 @@ public class Game
 
         if (isModel() && isAiTurn())
         {
-            _display.resetSelection();
-
             runAi();
-            toggleCurrentPlayer();
         }
         else if (_display.cellselected2 != -1)
         {
+            Console.WriteLine($"dd: {_display.cellselected1}. {_display.cellselected2}");
             AttemptMove(_display.cellselected1, _display.cellselected2);
             _display.resetSelection();
         }

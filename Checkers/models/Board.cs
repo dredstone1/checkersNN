@@ -73,7 +73,7 @@ public class Board
         return CellP.WHITE_C;
     }
 
-    public static PlayerType CellTypeToPlayerType(CellP c)
+    static public PlayerType CellTypeToPlayerType(CellP c)
     {
         return c == CellP.BLACK_C ? PlayerType.BLACK : PlayerType.WHITE;
     }
