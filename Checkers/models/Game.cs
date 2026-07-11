@@ -91,25 +91,25 @@ public class Game
         return model != 0;
     }
 
+    public static int GetHighest(float[] list, int offset = 0, int length = 64)
+    {
+        int highest = 0;
+
+        for (int i = 0; i < length; ++i)
+        {
+            if (list[highest + offset] < list[i + offset])
+                highest = i;
+        }
+
+        return highest;
+    }
+
     public static (int h1, int h2) TransformAiOut(float[] list)
     {
-        int h1 = 0;
-        int h2 = 0;
+        int h1 = GetHighest(list, 0, 64);
+        int h2 = GetHighest(list, 64, 64);
 
-        for (int i = 0; i < 64; ++i)
-        {
-            if (list[h1] < list[i])
-                h1 = i;
-        }
-
-        for (int i = 0; i < 64; ++i)
-        {
-            if (list[h2 + 64] < list[i + 64])
-                h2 = i;
-        }
-
-        // return (h1, h2);
-        return (47, 38);
+        return (h1, h2);
     }
 
     void runAi()
