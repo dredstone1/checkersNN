@@ -35,7 +35,7 @@ BitBoard board = new(
 );
 
 Stopwatch sw = Stopwatch.StartNew();
-var (bestMove, evalForBot) = CheckersEngine.FindBestMove(board, depth: 45);
+var (bestMove, evalForBot) = CheckersEngine.FindBestMove(board, depth: 40);
 sw.Stop();
 if (bestMove is null)
 {

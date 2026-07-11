@@ -30,6 +30,11 @@ public static class BitboardHelpers
         bitboard &= bitboard - 1;
         return (byte)index;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int CountBits(BoardBits mask) =>
+        BitOperations.PopCount((ulong)mask) + BitOperations.PopCount((ulong)(mask >> 64));
+
 #elif BOARD_8
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static byte BitScanForward(ref BoardBits bitboard)
@@ -43,6 +48,11 @@ public static class BitboardHelpers
         bitboard &= bitboard - 1;
         return (byte)index;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int CountBits(BoardBits mask) =>
+        BitOperations.PopCount(mask);
+
 #endif
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

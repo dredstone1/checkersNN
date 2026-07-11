@@ -1,17 +1,26 @@
 ﻿namespace Engine.Evaluators;
 
+public struct EvaluationResult
+{
+    public int WhiteScore;
+    public int BlackScore;
+}
+
 public static class Evaluator
 {
     public static int Evaluate(BitBoard board)
     {
-        if (board.IsWhiteToMove)
-        {
-            return board.WhiteMaterial - board.BlackMaterial;
-        }
-        else
-        {
-            return board.BlackMaterial - board.WhiteMaterial;
-        }
+        // EvaluationResult centerResult = CenterEvaluator.Evaluate(board);
+        EvaluationResult backrankResult = BackrankControlEvaluator.Evaluate(board);
+
+        int whiteScore = backrankResult.WhiteScore
+            + board.WhiteMaterial;
+        int blackScore =  backrankResult.BlackScore
+            + board.BlackMaterial;
+
+        return board.IsWhiteToMove
+            ? whiteScore - blackScore
+            : blackScore - whiteScore;
     }
 
     public static bool TryEvaluateTermination(BitBoard board, int depth, out int terminationEval)
