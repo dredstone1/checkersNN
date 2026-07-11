@@ -1,0 +1,71 @@
+#ifndef STATE
+#define STATE
+
+#include "../model/config.hpp"
+#include <atomic>
+
+namespace nn::visualizer {
+constexpr int STATES_COUNT = 4;
+
+enum class SettingType {
+	Pause,
+	PreciseMode,
+	AutoPause,
+	ExitTraining,
+	None,
+};
+
+const std::array<std::string_view, STATES_COUNT> statesName = {
+    "pause",
+    "precise mode",
+    "auto pause",
+    "exit training",
+};
+
+enum class NnMode {
+	Forword,
+	Backward,
+	None,
+};
+
+enum class AlgorithmMode {
+	Normal,
+	Training,
+	Evaluating,
+};
+
+struct Settings {
+	std::atomic<bool> pause{true};
+	std::atomic<bool> preciseMode{true};
+	std::atomic<bool> autoPause{true};
+	std::atomic<bool> exitTraining{false};
+};
+
+class StateManager {
+  public:
+	Settings settings;
+	const model::Config &config;
+
+	int currentBatch{0};
+	std::atomic<bool> updateMode{false};
+	std::atomic<NnMode> nnMode{NnMode::Forword};
+	std::atomic<AlgorithmMode> algorithmMode{AlgorithmMode::Normal};
+
+	StateManager(const model::Config &_config) : config(_config) {}
+	~StateManager() = default;
+
+	void toggle(const SettingType state);
+	void toggle(const std::string state) { toggle(getStatefromString(state)); }
+
+	std::string_view getStateString(const SettingType state);
+	SettingType getStatefromString(const std::string &state);
+
+	bool getState(const SettingType state);
+	void setState(const SettingType state, const bool stateMode);
+	void setState(const std::string &state, const bool stateMode) {
+		setState(getStatefromString(state), stateMode);
+	}
+};
+} // namespace nn::visualizer
+
+#endif // STATE

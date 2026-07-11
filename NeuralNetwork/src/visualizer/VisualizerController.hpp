@@ -1,0 +1,58 @@
+#ifndef VISUALIZERCONTROLLER
+#define VISUALIZERCONTROLLER
+
+#include "VisualizerRenderer.hpp"
+#include "tensor.hpp"
+#include <memory>
+#include <network/IvisualNetwork.hpp>
+#include <thread>
+
+namespace nn::model {
+class Model;
+}
+
+namespace nn::visualizer {
+class VisualManager {
+  private:
+	void updateDisplay();
+	std::atomic<bool> running{false};
+	std::unique_ptr<VisualRender> renderer;
+	const model::Config &config;
+	std::shared_ptr<StateManager> Vstate;
+	std::thread displayThread;
+
+	void stop();
+	void startVisuals();
+
+	inline bool checkPointers() const { return renderer && Vstate; }
+	void initState();
+
+	friend class model::Model;
+
+  public:
+	VisualManager(const model::Config &_config);
+	~VisualManager();
+
+	void start();
+	void setNewPhaseMode(const NnMode nn_mode);
+	void updateBatchCounter(const int batch);
+	void updateLoss(
+	    const global::ValueType newDataLoss,
+	    int index);
+	void updateEvaluate(
+	    const global::ValueType newDataEvaluate,
+	    int index);
+	void updateAlgorithmMode(const AlgorithmMode algorithm_mode);
+	void updateLearningRate(const global::ValueType newLerningRate);
+
+	bool exitTraining();
+
+	void updatePrediction(const global::Tensor &out);
+	void updateInput(const global::Tensor &input);
+
+	void addVisualSubNetwork(const std::shared_ptr<IVisualNetwork> newVisual);
+    void resetGraph();
+};
+} // namespace nn::visualizer
+
+#endif // VISUALIZERCONTROLLER

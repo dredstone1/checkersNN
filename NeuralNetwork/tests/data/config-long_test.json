@@ -1,0 +1,24 @@
+{
+	"visual config": {
+		"modes": [
+			{ "state": "pause", "mode": true },
+			{ "state": "precise mode", "mode": true },
+			{ "state": "auto pause", "mode": true }
+		]
+	},
+	"training config": {
+		"batch size": 2,
+		"batch count": 1000,
+		"learning rate": 1.0
+	},
+	"network config": [
+		{
+			"type": "FNN",
+			"input size": 50,
+			"output size": 2,
+			"layers": [
+				{ "size": 2, "activationType": 1 }
+			]
+		}
+	]
+}
