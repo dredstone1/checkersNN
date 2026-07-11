@@ -91,7 +91,7 @@ public class Game
         return model != 0;
     }
 
-    public static int GetHighest(float[] list, int offset = 0, int length = 64)
+    static int GetHighest(float[] list, int length, int offset = 0)
     {
         int highest = 0;
 
@@ -104,9 +104,9 @@ public class Game
         return highest;
     }
 
-    public static (int h1, int h2) TransformAiOut(float[] list)
+    static (int h1, int h2) TransformAiOut(float[] list)
     {
-        int h1 = GetHighest(list, 0, 64);
+        int h1 = GetHighest(list, 64, 0);
         int h2 = GetHighest(list, 64, 64);
 
         return (h1, h2);
@@ -125,7 +125,7 @@ public class Game
         _display.cancelAI = true;
     }
 
-    private bool isAiTurn()
+    bool isAiTurn()
     {
         if (_display.cancelAI)
             return false;
@@ -159,7 +159,7 @@ public class Game
         return (_running && _display.IsRunning);
     }
 
-    public void GameLoop()
+    void GameLoop()
     {
         _running = true;
 
@@ -193,7 +193,6 @@ public class Game
         WhiteAI = AIW;
         BlackAI = AIB;
 
-        Console.WriteLine($"test: {WhiteAI}, {BlackAI}");
         bool AI = AIB || AIW;
         load &= AI;
         save &= AI;
