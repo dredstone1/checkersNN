@@ -54,7 +54,7 @@ public class Game
 
             if (dx == 2)
             {
-                Vector2i pos3 = pos1 + pos2 / 2;
+                Vector2i pos3 = (pos1 + pos2) / 2;
 
                 if (_board.cells[Board.PosToIndex(pos3)] == Cell.EMPTY_C)
                     return true;
@@ -148,7 +148,7 @@ public class Game
         }
         else if (_display.cellselected2 != -1)
         {
-            Console.WriteLine($"dd: {_display.cellselected1}. {_display.cellselected2}");
+            Console.WriteLine($"user selection: {_display.cellselected1}. {_display.cellselected2}");
             AttemptMove(_display.cellselected1, _display.cellselected2);
             _display.resetSelection();
         }

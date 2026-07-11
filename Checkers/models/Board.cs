@@ -73,7 +73,7 @@ public class Board
         return CellP.WHITE_C;
     }
 
-    static public PlayerType CellTypeToPlayerType(CellP c)
+    public static PlayerType CellTypeToPlayerType(CellP c)
     {
         return c == CellP.BLACK_C ? PlayerType.BLACK : PlayerType.WHITE;
     }
@@ -89,7 +89,7 @@ public class Board
         if (dx != dy || dx != 2)
             return;
 
-        Vector2i pos3 = pos1 + pos2 / 2;
+        Vector2i pos3 = (pos1 + pos2) / 2;
 
         int i = PosToIndex(pos3);
         if (_board[i] != Cell.EMPTY_C)
@@ -147,7 +147,7 @@ public class Board
             dy = 1;
         if (pos2.X - pos1.X < 0)
             dx = -1;
-        if (pos2.Y - pos1.Y < 0)
+        if (pos1.Y - pos2.Y < 0)
             dy = -1;
 
         for (int i = 1; i < d; ++i)

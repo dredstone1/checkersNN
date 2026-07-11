@@ -93,7 +93,7 @@ public class Display
     }
 
     public static Color GetSquareColor(int i) =>
-        ((i + i / GRID_SIZE) % 2 == 0) ? new Color(205, 133, 63) : new Color(139, 69, 19);
+        (i + i / GRID_SIZE) % 2 == 0 ? new Color(205, 133, 63) : new Color(139, 69, 19);
 
     public void DrawBoard()
     {
@@ -156,7 +156,7 @@ public class Display
         int x = pos.X / SQUARE_RES;
         int y = pos.Y / SQUARE_RES;
 
-        return (y * GRID_SIZE + x);
+        return y * GRID_SIZE + x;
     }
 
     void HandleMove(Vector2i pos)
