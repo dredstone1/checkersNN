@@ -1,5 +1,0 @@
-<Solution>
-  <Project Path="DataGenerator/DataGenerator.csproj" />
-  <Project Path="Engine/Engine.csproj" />
-  <Project Path="EngineTests/EngineTests.csproj" />
-</Solution>
