@@ -32,6 +32,9 @@ public class Board
     public Board()
     {
         ResetBoard();
+
+        // for testing
+        _board[4] = Cell.WHITEQ_C;
     }
 
     public void ResetBoard()
@@ -39,14 +42,14 @@ public class Board
         ClearBoard();
 
         ResetBoard(0, 3, Cell.BLACKN_C);
-        ResetBoard(5 * 8, 3, Cell.WHITEN_C);
+        ResetBoard(5 * Display.GRID_SIZE, 3, Cell.WHITEN_C);
     }
 
     void ResetBoard(int offset, int layers, Cell c)
     {
-        for (int i = offset; i < offset + layers * 8; ++i)
+        for (int i = offset; i < offset + layers * Display.GRID_SIZE; ++i)
         {
-            if ((i + i / 8) % 2 != 0)
+            if ((i + i / Display.GRID_SIZE) % 2 != 0)
                 continue;
 
             _board[i] = c;
@@ -70,45 +73,28 @@ public class Board
         return CellP.WHITE_C;
     }
 
-    public PlayerType CellTypeToPlayerType(CellP c)
+    static public PlayerType CellTypeToPlayerType(CellP c)
     {
-        if (c == CellP.BLACK_C)
-            return PlayerType.BLACK;
-
-        return PlayerType.WHITE;
+        return c == CellP.BLACK_C ? PlayerType.BLACK : PlayerType.WHITE;
     }
 
     void handleDestroy(int s1, int s2)
     {
-        if (PModeFromCellIndex(s1) == PlayerMode.NORMAL)
-            handleDestroyN(s1, s2);
-        else
-            handleDestroyQ(s1, s2);
-    }
+        Vector2i pos1 = IndexToPos(s1);
+        Vector2i pos2 = IndexToPos(s2);
 
-    void handleDestroyN(int s1, int s2)
-    {
-        int x1 = s1 % 8;
-        int y1 = s1 / 8;
-
-        int x2 = s2 % 8;
-        int y2 = s2 / 8;
-
-        int dx = Math.Abs(x1 - x2);
-        int dy = Math.Abs(y1 - y2);
+        int dx = Math.Abs(pos1.X - pos2.X);
+        int dy = Math.Abs(pos1.Y - pos2.Y);
 
         if (dx != dy || dx != 2)
             return;
 
-        int x3 = (x1 + x2) / 2;
-        int y3 = (y1 + y2) / 2;
+        Vector2i pos3 = pos1 + pos2 / 2;
 
-        int i = PosToIndex(x3, y3);
+        int i = PosToIndex(pos3);
         if (_board[i] != Cell.EMPTY_C)
             _board[i] = Cell.EMPTY_C;
     }
-
-    void handleDestroyQ(int s1, int s2) { }
 
     public void Move(int s1, int s2)
     {
@@ -132,16 +118,74 @@ public class Board
         return PlayerMode.NORMAL;
     }
 
-    public int PosToIndex(int x, int y)
+    public static int PosToIndex(int x, int y)
     {
-        return y * 8 + x;
+        return y * Display.GRID_SIZE + x;
     }
 
-    public Vector2f IndexToPos(int i)
+    public static int PosToIndex(Vector2i pos)
     {
-        int x = i % 8;
-        int y = i / 8;
+        return PosToIndex(pos.X, pos.Y);
+    }
 
-        return new Vector2f(x, y);
+    public static Vector2i IndexToPos(int i)
+    {
+        int x = i % Display.GRID_SIZE;
+        int y = i / Display.GRID_SIZE;
+
+        return (x, y);
+    }
+
+    public int GetDDiagonl(int s1, int s2)
+    {
+        Vector2i pos1 = IndexToPos(s1);
+        Vector2i pos2 = IndexToPos(s2);
+
+        int d = Math.Abs(pos1.X - pos2.X);
+
+        int dx = 1,
+            dy = 1;
+        if (pos2.X - pos1.X < 0)
+            dx = -1;
+        if (pos2.Y - pos1.Y < 0)
+            dy = -1;
+
+        for (int i = 1; i < d; ++i)
+        {
+            if (_board[PosToIndex(pos1.X + i * dx, pos1.Y + i * dy)] == Cell.EMPTY_C)
+                continue;
+
+            return i + 1;
+        }
+
+        return 0;
+    }
+
+    public float[] getNNData()
+    {
+        float[] data = new float[192];
+
+        for (int i = 0; i < 64; ++i)
+        {
+            if (_board[i] == Cell.EMPTY_C)
+                data[i] = 1;
+        }
+
+        for (int i = 64; i < 128; ++i)
+        {
+            if (_board[i - 64] == Cell.BLACKN_C)
+                data[i] = 1;
+            else if (_board[i - 64] == Cell.BLACKQ_C)
+                data[i] = 0.5f;
+        }
+
+        for (int i = 128; i < 192; ++i)
+        {
+            if (_board[i - 128] == Cell.WHITEN_C)
+                data[i] = 1;
+            else if (_board[i - 128] == Cell.WHITEQ_C)
+                data[i] = 0.5f;
+        }
+        return data;
     }
 }

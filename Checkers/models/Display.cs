@@ -6,15 +6,17 @@ namespace Checkers.models;
 
 public class Display
 {
-    const int GRID_RES = 600;
+    public const int GRID_RES = 600;
     public const int GRID_SIZE = 8;
-    const int SQUARE_RES = GRID_RES / GRID_SIZE;
+    public const int SQUARE_RES = GRID_RES / GRID_SIZE;
 
     private bool running = false;
     public bool IsRunning
     {
         get { return running; }
     }
+
+    public bool cancelAI = false;
 
     private readonly RenderWindow _window;
 
@@ -49,12 +51,9 @@ public class Display
         DrawPlayers();
     }
 
-    Color getPLayerColor(Cell c)
+    static Color getPLayerColor(Cell c)
     {
-        if (c == Cell.BLACKN_C || c == Cell.BLACKQ_C)
-            return Color.Black;
-
-        return Color.White;
+        return (c == Cell.BLACKN_C || c == Cell.BLACKQ_C) ? Color.Black : Color.White;
     }
 
     void DrawPlayers()
@@ -64,20 +63,19 @@ public class Display
             if (_board.cells[i] == Cell.EMPTY_C)
                 continue;
 
-            int x = (i % GRID_SIZE) * SQUARE_RES;
-            int y = (i / GRID_SIZE) * SQUARE_RES;
-
-            Vector2f pos = (x, y);
+            Vector2i pos = Board.IndexToPos(i);
+            pos *= SQUARE_RES;
 
             if (i == cellselected1)
                 pos += (10, 10);
 
-            DrawPlayer(
-                pos,
-                getPLayerColor(_board.cells[i]),
-                (_board.cells[i] == Cell.BLACKQ_C || _board.cells[i] == Cell.WHITEQ_C)
-            );
+            DrawPlayer((Vector2f)pos, getPLayerColor(_board.cells[i]), isQueen(_board.cells[i]));
         }
+    }
+
+    static bool isQueen(Cell c)
+    {
+        return (c == Cell.BLACKQ_C || c == Cell.WHITEQ_C);
     }
 
     public void DrawPlayer(Vector2f pos, Color c, bool queen)
@@ -85,22 +83,13 @@ public class Display
         CircleShape rect = new CircleShape
         {
             Radius = SQUARE_RES * 0.3f,
-            Position = (pos + (20f, 20f)) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
+            Position = pos + (20, 20) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
             FillColor = c,
         };
+        _window.Draw(rect);
 
         if (queen)
-        {
-            CircleShape rect1 = new CircleShape
-            {
-                Radius = SQUARE_RES * 0.3f,
-                Position = (pos + (30f, 30f)) + (SQUARE_RES * 0.2f, SQUARE_RES * 0.2f),
-                FillColor = c,
-            };
-
-            _window.Draw(rect1);
-        }
-        _window.Draw(rect);
+            DrawPlayer(pos + (10, 10), c, false);
     }
 
     public static Color GetSquareColor(int i) =>
@@ -108,12 +97,9 @@ public class Display
 
     public void DrawBoard()
     {
-        for (int i = 0; i < GRID_SIZE * GRID_SIZE; ++i)
+        for (int i = 0; i < 64; ++i)
         {
-            int x = (i % GRID_SIZE) * SQUARE_RES;
-            int y = (i / GRID_SIZE) * SQUARE_RES;
-
-            DrawSquare((x, y), GetSquareColor(i));
+            DrawSquare((Vector2f)Board.IndexToPos(i) * SQUARE_RES, GetSquareColor(i));
         }
     }
 
@@ -148,22 +134,37 @@ public class Display
         {
             if (e.Button == Mouse.Button.Left)
             {
-                HandleMove((Vector2f)e.Position);
+                HandleMove(e.Position);
+            }
+        };
+
+        _window.KeyPressed += (sender, e) =>
+        {
+            if (e.Code == Keyboard.Key.Escape)
+            {
+                CloseDisplay();
+            }
+            else if (e.Code == Keyboard.Key.Space)
+            {
+                cancelAI = true;
             }
         };
     }
 
-    int getIndexFromPos(Vector2f pos)
+    static int getIndexFromPos(Vector2i pos)
     {
-        int x = (int)pos.X / SQUARE_RES;
-        int y = (int)pos.Y / SQUARE_RES;
+        int x = pos.X / SQUARE_RES;
+        int y = pos.Y / SQUARE_RES;
 
         return (y * GRID_SIZE + x);
     }
 
-    void HandleMove(Vector2f pos)
+    void HandleMove(Vector2i pos)
     {
         pos -= (20, 20);
+
+        if (pos.X < 0 || pos.Y < 0 || pos.X > GRID_RES || pos.Y > GRID_RES)
+            return;
 
         if (cellselected1 != -1)
             cellselected2 = getIndexFromPos(pos);
